@@ -87,6 +87,8 @@ public class SecurityConfiguration {
                 authorize.requestMatchers("/api/v1/produtos/distintos/produtos").permitAll();
                 authorize.requestMatchers("/api/v1/produtos/produtos").permitAll();
                 authorize.requestMatchers("/api/v1/imagens/imagem/download/**").permitAll();
+                authorize.requestMatchers("/api/v1/usuarios/usuario/{email}").permitAll();
+                authorize.requestMatchers("/api/v1/usuarios/cadastrar").permitAll();
                 authorize.requestMatchers("/pedido/pesquisar").hasAuthority("GERENTE");
                 authorize.anyRequest().authenticated();
             })

@@ -64,15 +64,6 @@ public class UsuarioService implements IUsuarioService {
             () -> new EntityNotFoundException("Usuário não encontrado"));
     }
 
-
-    // @Override
-    // public UsuarioPesquisaDTO buscarPorId(UUID id) {
-    //     Usuario usuario = repository.findById(id).orElseThrow(() -> {
-    //         throw new EntityNotFoundException("Usuario não encontrado");
-    //     });
-    //     return mapper.toDTO(usuario);
-    // }
-
     @Override
     public Usuario buscarPorId(UUID id){
         return repository.findById(id).orElseThrow(()->{
@@ -97,5 +88,10 @@ public class UsuarioService implements IUsuarioService {
         return Optional.ofNullable(repository.findByEmail(email))
                     .orElseThrow(() -> new EntityNotFoundException("Login necessário"));
     }
-    
+
+    @Override
+    public UsuarioPesquisaDTO buscarPorEmail(String email){
+        return Optional.ofNullable(mapper.toDTO(repository.findByEmail(email)))
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    }    
 }

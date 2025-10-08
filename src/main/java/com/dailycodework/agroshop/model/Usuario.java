@@ -39,6 +39,9 @@ public class Usuario {
 
     private String senha;
 
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval=true)
+    private Endereco endereco;
+
     @OneToOne(mappedBy = "usuario", cascade= CascadeType.ALL, orphanRemoval=true)
     private Carrinho carrinho;
 

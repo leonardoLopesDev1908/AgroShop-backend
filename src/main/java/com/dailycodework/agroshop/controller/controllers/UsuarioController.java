@@ -61,4 +61,10 @@ public class UsuarioController {
         Usuario usuario = service.atualizarUsuario(dto, id);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", usuario));
     }
+
+    @GetMapping("/usuario/{email}")
+    public ResponseEntity<ApiResponse> getUsuarioPorEmail(@PathVariable String email){
+        UsuarioPesquisaDTO dto = service.buscarPorEmail(email);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
+    }
 }
