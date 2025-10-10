@@ -6,6 +6,7 @@ import java.util.List;
 import com.dailycodework.agroshop.model.Categoria;
 
 public record ProdutoPesquisaDTO(
+            Long id,
             String nome,
             String marca,
             BigDecimal preco,
