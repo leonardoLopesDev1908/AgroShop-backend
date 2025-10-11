@@ -46,6 +46,7 @@ public class UsuarioController {
 
     @PostMapping("/cadastrar")
     public ResponseEntity<ApiResponse> cadastrarUsuario(@Valid @RequestBody UsuarioCadastroDTO dto){
+        System.out.println(dto.endereco());
         UsuarioPesquisaDTO usuario = service.addUsuario(dto);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", usuario));
     }

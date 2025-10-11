@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import com.dailycodework.agroshop.controller.dto.cadastro.UsuarioCadastroDTO;
 import com.dailycodework.agroshop.controller.dto.pesquisa.UsuarioPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.update.UsuarioUpdateDTO;
+import com.dailycodework.agroshop.controller.mapper.EnderecoMapper;
 import com.dailycodework.agroshop.controller.mapper.UsuarioMapper;
+import com.dailycodework.agroshop.model.Endereco;
 import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.repository.UsuarioRepository;
 
@@ -29,6 +31,7 @@ public class UsuarioService implements IUsuarioService {
     private final UsuarioMapper mapper;
     private final UsuarioValidator validator;
     private final PasswordEncoder passwordEncoder;
+    private final EnderecoMapper enderecoMapper;
 
     @Override
     @Transactional
@@ -37,6 +40,11 @@ public class UsuarioService implements IUsuarioService {
         validator.validar(usuario);
         
         usuario.setSenha(passwordEncoder.encode(dto.senha()));
+        
+        Endereco end = enderecoMapper.toEntity(dto.endereco());
+        usuario.setEndereco(end);
+        end.setUsuario(usuario);
+
         return mapper.toDTO(repository.save(usuario));
     }
 
