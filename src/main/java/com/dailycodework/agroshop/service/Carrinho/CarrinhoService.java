@@ -1,15 +1,21 @@
 package com.dailycodework.agroshop.service.Carrinho;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.dailycodework.agroshop.controller.dto.pesquisa.ItemCarrinhoPesquisaDTO;
+import com.dailycodework.agroshop.controller.mapper.ItemCarrinhoMapper;
+import com.dailycodework.agroshop.controller.mapper.UsuarioMapper;
 import com.dailycodework.agroshop.model.Carrinho;
 import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.repository.CarrinhoRepository;
 import com.dailycodework.agroshop.repository.ItemCarrinhoRepository;
+import com.dailycodework.agroshop.service.Usuario.UsuarioService;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +27,9 @@ public class CarrinhoService implements ICarrinhoService {
 
     private final CarrinhoRepository repository;
     private final ItemCarrinhoRepository itemRepository;
+    private final ItemCarrinhoMapper mapper;
+    private final UsuarioService userService;
+    private final UsuarioMapper userMapper;
 
     @Override
     public Carrinho buscarCarrinho(Long id) {
@@ -64,6 +73,15 @@ public class CarrinhoService implements ICarrinhoService {
             throw new EntityNotFoundException("Carrinho não encontrado");
         });
         return carrinho.getValorTotal();
+    }
+
+    @Override
+    public List<ItemCarrinhoPesquisaDTO> todosItens(String email){
+        Usuario usuario = (userService.buscarPorEmail(email));
+        Carrinho carrinho = usuario.getCarrinho();
+        return itemRepository.getAllByCarrinhoId(carrinho.getId()).stream()
+                    .map(mapper::toDTO)
+                    .collect(Collectors.toList());
     }
     
 }
