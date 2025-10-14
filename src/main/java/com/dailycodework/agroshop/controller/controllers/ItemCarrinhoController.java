@@ -1,7 +1,5 @@
 package com.dailycodework.agroshop.controller.controllers;
 
-import java.util.UUID;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,4 +49,5 @@ public class ItemCarrinhoController {
         service.atualizarQuantidade(idCarrinho, produtoId, quantidade);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
+
 }

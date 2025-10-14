@@ -65,7 +65,7 @@ public class UsuarioController {
 
     @GetMapping("/usuario/{email}")
     public ResponseEntity<ApiResponse> getUsuarioPorEmail(@PathVariable String email){
-        UsuarioPesquisaDTO dto = service.buscarPorEmail(email);
+        UsuarioPesquisaDTO dto = service.buscarPorEmailDTO(email);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
     }
 }

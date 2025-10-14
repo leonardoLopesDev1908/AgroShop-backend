@@ -98,8 +98,14 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public UsuarioPesquisaDTO buscarPorEmail(String email){
+    public UsuarioPesquisaDTO buscarPorEmailDTO(String email){
         return Optional.ofNullable(mapper.toDTO(repository.findByEmail(email)))
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
     }    
+
+    @Override 
+    public Usuario buscarPorEmail(String email){
+        return Optional.ofNullable(repository.findByEmail(email))
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    }
 }
