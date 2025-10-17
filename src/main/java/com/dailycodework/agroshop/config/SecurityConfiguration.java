@@ -38,8 +38,37 @@ public class SecurityConfiguration {
     @Value("${api.prefix}")
     private static String API;
    
-    private static final List<String> SECURED_URLS =
-            List.of(API + "/carrinhos/**", API+"/itemCarrinho/**", API+"/pedidos/**");
+    private static final String[] PUBLIC_ENDPOINTS = {
+        API + "/login/**",
+        API + "/auth/**",
+        API + "/produtos/distintos/produtos",
+        API + "/produtos/produtos",
+        API + "/produtos/produto/{id}/produto",
+        API + "/imagens/imagem/download/**",
+        API + "/imagens/upload",
+        API + "/usuarios/usuario/{email}",
+        API + "/usuarios/cadastrar",
+        API + "/itens/item/cadastrar",
+        API + "/carrinho/itens",
+        "/css/**", "/js/**", "/images/**", "/webjars/**"
+    };
+    
+    private static final String[] FUNCIONARIO_ENDPOINTS = {
+        API + "/produtos/cadastrar",
+        API + "/produtos/deletar/{id}",
+        API + "/produtos/atualizar/{id}",
+        API + "/pedido/pesquisar"
+    };
+
+    private static final String[] GERENTE_ENDPOINTS = {
+        
+    };
+
+    private static final String[] AUTHENTICATED_ENDPOINTS = {
+        API + "/carrinhos/**",
+        API + "/itens/**",
+        API + "/pedidos/**",
+    };
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception{
@@ -79,24 +108,13 @@ public class SecurityConfiguration {
             .authenticationProvider(authProvider())
             .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
             .httpBasic(Customizer.withDefaults())
-            .authorizeHttpRequests(authorize -> {
-                authorize.requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated();
-                authorize.requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll();
-                authorize.requestMatchers("/api/v1/login/**").permitAll();
-                authorize.requestMatchers("/api/v1/auth/**").permitAll();
-                authorize.requestMatchers("/api/v1/produtos/distintos/produtos").permitAll();
-                authorize.requestMatchers("/api/v1/produtos/produtos").permitAll();
-                authorize.requestMatchers("/api/v1/produtos/cadastrar").permitAll();
-                authorize.requestMatchers("/api/v1/produtos/produto/{id}/produto").permitAll();
-                authorize.requestMatchers("/api/v1/imagens/imagem/download/**").permitAll();
-                authorize.requestMatchers("/api/v1/imagens/upload").permitAll();
-                authorize.requestMatchers("/api/v1/usuarios/usuario/{email}").permitAll();
-                authorize.requestMatchers("/api/v1/usuarios/cadastrar").permitAll();
-                authorize.requestMatchers("/api/v1/itens/item/cadastrar").permitAll();
-                authorize.requestMatchers("/api/v1/carrinho/itens").permitAll();
-                authorize.requestMatchers("/pedido/pesquisar").hasAuthority("GERENTE");
-                authorize.anyRequest().authenticated();
-            })
+            .authorizeHttpRequests(auth -> auth 
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(FUNCIONARIO_ENDPOINTS).hasAnyAuthority("Funcionario", "Gerente")
+                .requestMatchers(AUTHENTICATED_ENDPOINTS).authenticated()
+                // authorize.requestMatchers(GERENTE_ENDPOINTS)
+                .anyRequest().authenticated()
+            )
             .formLogin(form -> 
                 form.loginPage("/login")
                 .permitAll()
