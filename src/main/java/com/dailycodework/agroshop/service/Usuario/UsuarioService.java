@@ -16,7 +16,9 @@ import com.dailycodework.agroshop.controller.dto.update.UsuarioUpdateDTO;
 import com.dailycodework.agroshop.controller.mapper.EnderecoMapper;
 import com.dailycodework.agroshop.controller.mapper.UsuarioMapper;
 import com.dailycodework.agroshop.model.Endereco;
+import com.dailycodework.agroshop.model.Role;
 import com.dailycodework.agroshop.model.Usuario;
+import com.dailycodework.agroshop.repository.RoleRepository;
 import com.dailycodework.agroshop.repository.UsuarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -32,13 +34,19 @@ public class UsuarioService implements IUsuarioService {
     private final UsuarioValidator validator;
     private final PasswordEncoder passwordEncoder;
     private final EnderecoMapper enderecoMapper;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
-    public UsuarioPesquisaDTO addUsuario(UsuarioCadastroDTO dto) {
+    public UsuarioPesquisaDTO addUsuario(UsuarioCadastroDTO dto) {        
         Usuario usuario = mapper.toEntity(dto);
         validator.validar(usuario);
         
+        if(usuario.getRoles().isEmpty() || usuario.getRoles() == null){
+            Role role = roleRepository.getByNome("Cliente");
+            usuario.getRoles().add(role);
+        }
+
         usuario.setSenha(passwordEncoder.encode(dto.senha()));
         
         Endereco end = enderecoMapper.toEntity(dto.endereco());
@@ -47,7 +55,6 @@ public class UsuarioService implements IUsuarioService {
 
         return mapper.toDTO(repository.save(usuario));
     }
-
 
     @Override
     @Transactional
@@ -78,7 +85,6 @@ public class UsuarioService implements IUsuarioService {
             throw new EntityNotFoundException("Usuário não encontrado");
         });
     }
-
 
     @Override
     public List<UsuarioPesquisaDTO> buscarPorNome(String nome) {

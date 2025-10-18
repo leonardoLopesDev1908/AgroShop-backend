@@ -16,5 +16,6 @@ public record UsuarioCadastroDTO (
                 @Size(min = 8, message = "A senha deve ter no mínimo 8 digitos")
                 String senha,
                 @NotNull
-                EnderecoCadastroDTO endereco
+                EnderecoCadastroDTO endereco,
+                String role
 ){}
