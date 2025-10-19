@@ -18,6 +18,7 @@ import com.dailycodework.agroshop.repository.ItemCarrinhoRepository;
 import com.dailycodework.agroshop.service.Usuario.UsuarioService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 
@@ -48,6 +49,7 @@ public class CarrinhoService implements ICarrinhoService {
         return repository.findByUsuarioEmail(email);
     }   
 
+    @Transactional
     @Override
     public void limparCarrinho(Long id) {
         Carrinho carrinho = repository.findById(id).orElseThrow(() -> {

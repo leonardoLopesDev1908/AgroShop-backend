@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dailycodework.agroshop.controller.dto.pesquisa.ItemCarrinhoPesquisaDTO;
 import com.dailycodework.agroshop.model.Carrinho;
+import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.response.ApiResponse;
 import com.dailycodework.agroshop.service.Carrinho.ICarrinhoService;
+import com.dailycodework.agroshop.service.Usuario.UsuarioService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class CarrinhoController {
 
     private final ICarrinhoService service;
+    private final UsuarioService userService;
 
     @GetMapping("/usuario/{usuarioId}/carrinho")
     public ResponseEntity<ApiResponse> buscarCarrinhoUsuario(@PathVariable UUID usuarioId){
@@ -31,9 +34,11 @@ public class CarrinhoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso", carrinho));
     }
 
-    @DeleteMapping("/carrinho/{id}/limpar")
-    public void limpar(@PathVariable Long id){
-        service.limparCarrinho(id);
+    @DeleteMapping("/carrinho/limpar")
+    public void limpar(){
+        Usuario usuario = userService.getAuthenticatedUsuario();
+        Carrinho carrinho =  usuario.getCarrinho();
+        service.limparCarrinho(carrinho.getId());
     }
 
     @GetMapping("/itens")
@@ -42,5 +47,4 @@ public class CarrinhoController {
         List<ItemCarrinhoPesquisaDTO> itens = service.todosItens(email);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", itens));
     }
-
 }

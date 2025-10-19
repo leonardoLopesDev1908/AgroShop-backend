@@ -94,6 +94,8 @@ public class SecurityConfiguration {
                 authorize.requestMatchers("/api/v1/usuarios/cadastrar").permitAll();
                 authorize.requestMatchers("/api/v1/itens/item/cadastrar").permitAll();
                 authorize.requestMatchers("/api/v1/carrinho/itens").permitAll();
+                authorize.requestMatchers("/api/v1/carrinho/carrinho/limpar").permitAll();
+                authorize.requestMatchers("/api/v1/itens/carrinho/item/{produtoId}/excluir").permitAll();
                 authorize.requestMatchers("/pedido/pesquisar").hasAuthority("GERENTE");
                 authorize.anyRequest().authenticated();
             })

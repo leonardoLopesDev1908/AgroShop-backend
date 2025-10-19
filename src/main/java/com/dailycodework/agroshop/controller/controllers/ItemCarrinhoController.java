@@ -36,9 +36,11 @@ public class ItemCarrinhoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
 
-    @DeleteMapping("/carrinho/{idCarrinho}/item/{produtoId}/excluir")
-    public ResponseEntity<ApiResponse> excluirItem(@PathVariable Long idCarrinho, @PathVariable Long produtoId){
-        service.removerItem(idCarrinho, produtoId);
+    @DeleteMapping("/carrinho/item/{produtoId}/excluir")
+    public ResponseEntity<ApiResponse> excluirItem(@PathVariable Long produtoId){
+        Usuario usuario = usuarioService.getAuthenticatedUsuario();
+        Carrinho carrinho = carrinhoService.novoCarro(usuario);
+        service.removerItem(carrinho.getId(), produtoId);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
 
