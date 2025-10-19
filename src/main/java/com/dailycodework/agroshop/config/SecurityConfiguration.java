@@ -1,7 +1,5 @@
 package com.dailycodework.agroshop.config;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +22,7 @@ import com.dailycodework.agroshop.security.jwt.AuthTokenFilter;
 import com.dailycodework.agroshop.security.jwt.JwtEntryPoint;
 import com.dailycodework.agroshop.security.user.ShopUserDetailsService;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -36,10 +35,42 @@ public class SecurityConfiguration {
     private final JwtEntryPoint authEntryPoint;
     
     @Value("${api.prefix}")
-    private static String API;
-   
-    private static final List<String> SECURED_URLS =
-            List.of(API + "/carrinhos/**", API+"/itemCarrinho/**", API+"/pedidos/**");
+    private String API;
+
+    private String[] PUBLIC_ENDPOINTS;
+    private String[] FUNCIONARIO_ENDPOINTS;
+    private String[] GERENTE_ENDPOINTS;
+    private String[] AUTHENTICATED_ENDPOINTS;
+
+    @PostConstruct
+    public void initEndpoints() {
+        PUBLIC_ENDPOINTS = new String[] {
+            API + "/css/**", "/js/**", "/images/**", "/webjars/**",
+            API + "/login/**",
+            API + "/auth/**",
+            API + "/produtos/distintos/produtos",
+            API + "/produtos/produtos",
+            API + "/imagens/imagem/download/**",
+            API + "/usuarios/cadastrar",
+            API + "/produtos/produto/*/produto"
+        };
+        
+        FUNCIONARIO_ENDPOINTS = new String[] {
+            API + "/produtos/cadastrar",
+            API + "/imagens/upload",
+            API + "/pedido/pesquisar"
+        };
+
+        GERENTE_ENDPOINTS = new String[] {
+
+        };
+
+        AUTHENTICATED_ENDPOINTS = new String[] {
+            API + "/carrinho/**",
+            API + "/itens/**",
+            API + "/pedido/**"
+        };
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception{
@@ -74,31 +105,20 @@ public class SecurityConfiguration {
     
         return http
             .csrf(AbstractHttpConfigurer::disable)
+            .cors(Customizer.withDefaults())
             .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authProvider())
             .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
             .httpBasic(Customizer.withDefaults())
-            .authorizeHttpRequests(authorize -> {
-                authorize.requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated();
-                authorize.requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll();
-                authorize.requestMatchers("/api/v1/login/**").permitAll();
-                authorize.requestMatchers("/api/v1/auth/**").permitAll();
-                authorize.requestMatchers("/api/v1/produtos/distintos/produtos").permitAll();
-                authorize.requestMatchers("/api/v1/produtos/produtos").permitAll();
-                authorize.requestMatchers("/api/v1/produtos/cadastrar").permitAll();
-                authorize.requestMatchers("/api/v1/produtos/produto/{id}/produto").permitAll();
-                authorize.requestMatchers("/api/v1/imagens/imagem/download/**").permitAll();
-                authorize.requestMatchers("/api/v1/imagens/upload").permitAll();
-                authorize.requestMatchers("/api/v1/usuarios/usuario/{email}").permitAll();
-                authorize.requestMatchers("/api/v1/usuarios/cadastrar").permitAll();
-                authorize.requestMatchers("/api/v1/itens/item/cadastrar").permitAll();
-                authorize.requestMatchers("/api/v1/carrinho/itens").permitAll();
-                authorize.requestMatchers("/api/v1/carrinho/carrinho/limpar").permitAll();
-                authorize.requestMatchers("/api/v1/itens/carrinho/item/{produtoId}/excluir").permitAll();
-                authorize.requestMatchers("/pedido/pesquisar").hasAuthority("GERENTE");
-                authorize.anyRequest().authenticated();
-            })
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(AUTHENTICATED_ENDPOINTS).authenticated()
+                .requestMatchers(FUNCIONARIO_ENDPOINTS).hasAnyAuthority("Gerente", "Funcionario", "ADM")
+                .requestMatchers(GERENTE_ENDPOINTS).hasAuthority("Gerente")
+                .anyRequest().permitAll()
+            )
             .formLogin(form -> 
                 form.loginPage("/login")
                 .permitAll()
