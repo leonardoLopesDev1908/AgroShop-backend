@@ -52,7 +52,6 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshAccessToken(HttpServletRequest request){
-       // cookieUtils.logCookies(request);
         String refreshToken = cookieUtils.getRefreshTokenFromCookies(request);
         if(refreshToken != null){
             boolean isValid = jwtUtils.validateToken(refreshToken);
