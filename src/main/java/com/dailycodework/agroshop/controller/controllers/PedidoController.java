@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dailycodework.agroshop.controller.dto.cadastro.PedidoCadastroDTO;
+import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.response.ApiResponse;
 import com.dailycodework.agroshop.service.Pedido.IPedidoService;
+import com.dailycodework.agroshop.service.Usuario.UsuarioService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,10 +25,12 @@ import lombok.RequiredArgsConstructor;
 public class PedidoController {
     
     private final IPedidoService service;
+    private final UsuarioService userService;
 
     @PostMapping("/usuario/pedido")
-    public ResponseEntity<ApiResponse> fazerNovoPedido(@RequestParam UUID id){
-        PedidoCadastroDTO dto = service.fazerPedido(id);
+    public ResponseEntity<ApiResponse> fazerNovoPedido(){
+        Usuario usuario = userService.getAuthenticatedUsuario();
+        PedidoCadastroDTO dto = service.fazerPedido(usuario.getId());
         return ResponseEntity.ok(new ApiResponse("Sucesso", dto));
     }
 
