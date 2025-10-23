@@ -1,6 +1,7 @@
 package com.dailycodework.agroshop.service.Carrinho;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dailycodework.agroshop.model.Carrinho;
 import com.dailycodework.agroshop.model.ItemCarrinho;
@@ -52,6 +53,7 @@ public class ItemCarrinhoService implements IItemCarrinhoService {
         carrinhoRepository.save(carrinho);
     }
 
+    @Transactional
     @Override
     public void atualizarQuantidade(Long carrinhoId, Long produtoId, int novaQuantidade) {
         if(novaQuantidade <= 0){
