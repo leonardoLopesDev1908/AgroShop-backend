@@ -29,6 +29,7 @@ public class PedidoService implements IPedidoService{
 
     private final PedidoRepository repository;
     private final ProdutoRepository produtoRepository;
+    private final PedidoValidator validator;
     private final ICarrinhoService carrinhoService;
     private final PedidoMapper mapper;
 
@@ -38,6 +39,7 @@ public class PedidoService implements IPedidoService{
         Carrinho carrinho = carrinhoService.buscarPorIdUsuario(usuarioId);
         Pedido pedido = criarPedido(carrinho);
         List<ItemPedido> itens = criarItens(pedido, carrinho);
+        //validator.validar(itens);
         pedido.setItens(new HashSet<>(itens));
         pedido.setValorTotal(calcularValorTotal(itens));
 
