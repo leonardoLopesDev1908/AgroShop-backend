@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 
 import com.dailycodework.agroshop.controller.dto.cadastro.ProdutoCadastroDTO;
 import com.dailycodework.agroshop.controller.dto.update.ProdutoUpdateDTO;
-import com.dailycodework.agroshop.model.Categoria;
 import com.dailycodework.agroshop.model.Produto;
 
 public interface IProdutoService {
@@ -37,4 +36,6 @@ public interface IProdutoService {
     List<Produto> getProdutoPorCategoria(String categoria);
 
     List<Produto> findDistinctProdutodsByNome();
+
+    Integer getEstoque(Long id);
 }

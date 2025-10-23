@@ -180,4 +180,8 @@ public class ProdutoService implements IProdutoService{
         return new ArrayList<>(distintos.values());
     }
     
+    @Override
+    public Integer getEstoque(Long id){
+        return repository.findEstoqueById(id);
+    }
 }
