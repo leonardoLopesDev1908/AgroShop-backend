@@ -18,5 +18,5 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>, JpaSpec
 
     boolean existsByNomeAndMarca(String nome, String marca);
     boolean existsByNomeAndMarcaAndIdNot(String nome, String marca, Long id);
-
+    Integer findEstoqueById(Long id);
 }

@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dailycodework.agroshop.controller.dto.update.ItemCarrinhoUpdateDTO;
 import com.dailycodework.agroshop.model.Carrinho;
 import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.response.ApiResponse;
@@ -28,8 +30,7 @@ public class ItemCarrinhoController {
     private final ICarrinhoService carrinhoService;
 
     @PostMapping("/item/cadastrar")
-    public ResponseEntity<ApiResponse> adicionarItemCarrinho(
-                                                    @RequestParam Long produtoId, @RequestParam int quantidade){
+    public ResponseEntity<ApiResponse> adicionarItemCarrinho(@RequestParam Long produtoId, @RequestParam int quantidade){
         Usuario usuario = usuarioService.getAuthenticatedUsuario();
         Carrinho carrinho = carrinhoService.novoCarro(usuario);    
         service.adicionarItem(carrinho.getId(), produtoId, quantidade);
@@ -44,11 +45,11 @@ public class ItemCarrinhoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
 
-    @PutMapping()
-    public ResponseEntity<ApiResponse> atualizarQuantidade(@PathVariable Long idCarrinho, 
-                                                           @PathVariable Long produtoId,
-                                                           @RequestParam int quantidade){
-        service.atualizarQuantidade(idCarrinho, produtoId, quantidade);
+    @PutMapping("/carrinho/atualizar")
+    public ResponseEntity<ApiResponse> atualizarQuantidade(@RequestBody ItemCarrinhoUpdateDTO dto){
+        Usuario user = usuarioService.getAuthenticatedUsuario();
+        Carrinho carrinho = carrinhoService.buscarPorIdUsuario(user.getId());
+        service.atualizarQuantidade(carrinho.getId(), dto.produtoId(), dto.quantidade());
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
 
