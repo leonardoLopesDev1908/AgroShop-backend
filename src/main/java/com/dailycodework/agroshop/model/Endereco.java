@@ -2,19 +2,23 @@ package com.dailycodework.agroshop.model;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Table
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Endereco {
     
@@ -31,5 +35,6 @@ public class Endereco {
 
     @OneToOne
     @JoinColumn(name="usuario_id")
+    @JsonIgnore
     private Usuario usuario;
 }

@@ -1,6 +1,7 @@
 package com.dailycodework.agroshop.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ public class Pedido {
     private Long id;
 
     @Column
-    private String data;
+    private LocalDateTime data;
 
     @Column
     private BigDecimal valorTotal;

@@ -58,6 +58,9 @@ public class SecurityConfiguration {
         FUNCIONARIO_ENDPOINTS = new String[] {
             API + "/produtos/cadastrar",
             API + "/imagens/upload",
+            API + "/pedidos/usuario/pedidos",
+            API + "/pedidos/pedido/*/excluir",
+            API + "/pedidos/pedido/*/atualizar"
         };
 
         GERENTE_ENDPOINTS = new String[] {

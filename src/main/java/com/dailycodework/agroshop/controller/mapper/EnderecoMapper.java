@@ -8,7 +8,6 @@ import com.dailycodework.agroshop.model.Endereco;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy=
                                     NullValuePropertyMappingStrategy.IGNORE)
-
 public interface EnderecoMapper {
     
     Endereco toEntity(EnderecoCadastroDTO dto);
