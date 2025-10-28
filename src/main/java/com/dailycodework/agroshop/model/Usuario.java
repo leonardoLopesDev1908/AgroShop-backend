@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.hibernate.annotations.NaturalId;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,10 +21,16 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table
 public class Usuario {
     
@@ -39,7 +47,8 @@ public class Usuario {
 
     private String senha;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval=true, fetch= FetchType.LAZY)
+    @JsonManagedReference
     private Endereco endereco;
 
     @OneToOne(mappedBy = "usuario", cascade= CascadeType.ALL, orphanRemoval=true)

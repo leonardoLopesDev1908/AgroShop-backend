@@ -25,11 +25,10 @@ import com.dailycodework.agroshop.repository.CategoriaRepository;
 import com.dailycodework.agroshop.repository.ItemCarrinhoRepository;
 import com.dailycodework.agroshop.repository.ItemPedidoRepository;
 import com.dailycodework.agroshop.repository.ProdutoRepository;
-import com.dailycodework.agroshop.service.Categoria.CategoriaService;
-
 import static com.dailycodework.agroshop.repository.ProdutosSpecs.categoriaEqual;
 import static com.dailycodework.agroshop.repository.ProdutosSpecs.precoBetween;
 import static com.dailycodework.agroshop.repository.ProdutosSpecs.searchLike;
+import com.dailycodework.agroshop.service.Categoria.CategoriaService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -91,36 +90,34 @@ public class ProdutoService implements IProdutoService{
     @Override
     public void deletarProdutoPorId(Long id) {
         repository.findById(id)
-                .ifPresentOrElse((var produto) -> {
-                    List<ItemCarrinho> itens = itemCarrinhoRepository.findByProdutoId(id);
-                    itens.forEach(item -> {
-                        Carrinho carrinho = item.getCarrinho();
-                        carrinho.removeItem(item);
-                        itemCarrinhoRepository.delete(item);
-                    });
-
-                    List<ItemPedido> itensPedido =  itemPedidoRepository.findByProdutoId(id);
-                    itensPedido.forEach(item -> {
-                        item.setProduto(null);
-                        itemPedidoRepository.save(item);
-                    });
-
-                    Optional.ofNullable(produto.getCategoria())
-                            .ifPresent(categoria -> categoria.getProdutos().remove(produto));
-                    produto.setCategoria(null);
-
-                    repository.deleteById(produto.getId());
-                }, () -> {
-                    throw new EntityNotFoundException("Nenhum produto encontrado com esse ID");
+            .ifPresentOrElse((var produto) -> {
+                List<ItemCarrinho> itens = itemCarrinhoRepository.findByProdutoId(id);
+                itens.forEach(item -> {
+                    Carrinho carrinho = item.getCarrinho();
+                    carrinho.removeItem(item);
+                    itemCarrinhoRepository.delete(item);
                 });
+
+                List<ItemPedido> itensPedido =  itemPedidoRepository.findByProdutoId(id);
+                itensPedido.forEach(item -> {
+                    item.setProduto(null);
+                    itemPedidoRepository.save(item);
+                });
+
+                Optional.ofNullable(produto.getCategoria())
+                        .ifPresent(categoria -> categoria.getProdutos().remove(produto));
+                produto.setCategoria(null);
+
+                repository.deleteById(produto.getId());
+            }, () -> {
+                throw new EntityNotFoundException("Nenhum produto encontrado com esse ID");
+            });
     }
 
     @Override
     public Page<Produto> getProdutos(String search, String categoria, BigDecimal precoMin, 
                                         BigDecimal precoMax, Integer pagina, Integer tamanhoPagina) {
 
-        System.out.println("ENTROU NO SERVICE");
-                                            
         Specification<Produto> specs = null;
 
         Categoria categoriaSearched = categoriaService.buscaPorNome(categoria);
@@ -167,7 +164,6 @@ public class ProdutoService implements IProdutoService{
     @Override
     public List<Produto> getProdutoPorCategoria(String categoria) {
         throw new RuntimeException("");
-        //return repository.findByCategoria(categoria);
     }
 
     @Override
