@@ -82,7 +82,8 @@ public class ProdutoController {
     }   
 
     @PutMapping("/produto/atualizar/{id}")
-    public ResponseEntity<ApiResponse> atualizaProduto(@PathVariable Long id, ProdutoUpdateDTO dto){
+    public ResponseEntity<ApiResponse> atualizaProduto(@PathVariable Long id, 
+                                                       @RequestBody ProdutoUpdateDTO dto){
         ProdutoPesquisaDTO novoProduto = mapper.toDTO(service.atualizarProduto(id, dto));
         return ResponseEntity.ok(new ApiResponse("Sucesso!", novoProduto));
     }

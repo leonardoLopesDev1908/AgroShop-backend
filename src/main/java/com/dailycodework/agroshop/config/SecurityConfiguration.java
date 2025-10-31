@@ -64,7 +64,6 @@ public class SecurityConfiguration {
         };
 
         GERENTE_ENDPOINTS = new String[] {
-
         };
 
         AUTHENTICATED_ENDPOINTS = new String[] {
