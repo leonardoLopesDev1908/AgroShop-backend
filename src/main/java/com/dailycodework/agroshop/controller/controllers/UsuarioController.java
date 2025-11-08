@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dailycodework.agroshop.controller.dto.cadastro.EnderecoCadastroDTO;
 import com.dailycodework.agroshop.controller.dto.cadastro.UsuarioCadastroDTO;
+import com.dailycodework.agroshop.controller.dto.pesquisa.EnderecoPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.pesquisa.UsuarioPesquisaDTO;
+import com.dailycodework.agroshop.controller.dto.update.AlterarSenhaDTO;
 import com.dailycodework.agroshop.controller.dto.update.UsuarioUpdateDTO;
+import com.dailycodework.agroshop.controller.mapper.UsuarioMapper;
 import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.response.ApiResponse;
 import com.dailycodework.agroshop.service.Usuario.IUsuarioService;
@@ -30,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioController {
     
     private final IUsuarioService service;
+    private final UsuarioMapper mapper;
 
     // @GetMapping("usuario/{id}/usuario")
     // public ResponseEntity<ApiResponse> getUsuarioPorId(@PathVariable UUID id){
@@ -37,12 +42,27 @@ public class UsuarioController {
     //     return ResponseEntity.ok(new ApiResponse("Sucesso!", usuario));
     // }
 
+    @GetMapping("/usuario/dados")
+    public ResponseEntity<ApiResponse> getDados(){
+        Usuario usuario = service.getAuthenticatedUsuario();
+        UsuarioPesquisaDTO dto = mapper.toDTO(usuario);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
+    }
+
+    @PutMapping("/usuario/alterar-senha")
+    public ResponseEntity<ApiResponse> alterarSenha(@RequestBody AlterarSenhaDTO dto){
+        System.out.println("CONTROLLER");
+        Usuario user = service.getAuthenticatedUsuario();
+        UsuarioPesquisaDTO dtoUser = service.atualizarSenha(user, dto.email(),
+                                                     dto.senhaAtual(), dto.senhaNova());
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", dtoUser));                                                
+    }
+
     @GetMapping("usuario/{nome}/usuarios")
     public ResponseEntity<ApiResponse> getUsuariosPorNome(@PathVariable String nome){
         List<UsuarioPesquisaDTO> usuarios = service.buscarPorNome(nome);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", usuarios));
     }
-
 
     @PostMapping("/cadastrar")
     public ResponseEntity<ApiResponse> cadastrarUsuario(@Valid @RequestBody UsuarioCadastroDTO dto){
@@ -56,15 +76,30 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Deletado!", null));
     }
 
-    @PutMapping("/usuario/{id}/atualizar")
-    public ResponseEntity<ApiResponse> atualizaUsuario(@PathVariable UUID id, @RequestBody UsuarioUpdateDTO dto){
-        Usuario usuario = service.atualizarUsuario(dto, id);
-        return ResponseEntity.ok(new ApiResponse("Sucesso!", usuario));
-    }
-
     @GetMapping("/usuario/{email}")
     public ResponseEntity<ApiResponse> getUsuarioPorEmail(@PathVariable String email){
         UsuarioPesquisaDTO dto = service.buscarPorEmailDTO(email);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
+    }
+
+    @GetMapping("/usuario/endereco")
+    public ResponseEntity<ApiResponse> getEnderecoUsuario(){
+        Usuario usuario = service.getAuthenticatedUsuario();
+        List<EnderecoPesquisaDTO> enderecos = service.getEnderecos(usuario);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", enderecos));
+    }
+
+    @PostMapping("/endereco/cadastrar")
+    public ResponseEntity<ApiResponse> cadastrarEndereco(@RequestBody EnderecoCadastroDTO dto){
+        Usuario user = service.getAuthenticatedUsuario();
+        EnderecoPesquisaDTO response = service.cadastraEndereco(dto, user);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", response));
+    }
+
+    @PutMapping("/usuario/atualizar")
+    public ResponseEntity<ApiResponse> atualizarUsuario(@RequestBody UsuarioUpdateDTO dto){
+        Usuario user = service.getAuthenticatedUsuario();
+        UsuarioPesquisaDTO response = service.atualizarUsuario(dto, user);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", response));
     }
 }
