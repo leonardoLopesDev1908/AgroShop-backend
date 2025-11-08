@@ -10,7 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.dailycodework.agroshop.controller.dto.cadastro.EnderecoCadastroDTO;
 import com.dailycodework.agroshop.controller.dto.cadastro.UsuarioCadastroDTO;
+import com.dailycodework.agroshop.controller.dto.pesquisa.EnderecoPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.pesquisa.UsuarioPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.update.UsuarioUpdateDTO;
 import com.dailycodework.agroshop.controller.mapper.EnderecoMapper;
@@ -18,6 +20,7 @@ import com.dailycodework.agroshop.controller.mapper.UsuarioMapper;
 import com.dailycodework.agroshop.model.Endereco;
 import com.dailycodework.agroshop.model.Role;
 import com.dailycodework.agroshop.model.Usuario;
+import com.dailycodework.agroshop.repository.EnderecoRepository;
 import com.dailycodework.agroshop.repository.RoleRepository;
 import com.dailycodework.agroshop.repository.UsuarioRepository;
 
@@ -33,8 +36,9 @@ public class UsuarioService implements IUsuarioService {
     private final UsuarioMapper mapper;
     private final UsuarioValidator validator;
     private final PasswordEncoder passwordEncoder;
-    private final EnderecoMapper enderecoMapper;
     private final RoleRepository roleRepository;
+    private final EnderecoRepository enderecoRepository;
+    private final EnderecoMapper enderecoMapper;
 
     @Override
     @Transactional
@@ -49,34 +53,57 @@ public class UsuarioService implements IUsuarioService {
 
         usuario.setSenha(passwordEncoder.encode(dto.senha()));
         
-        Endereco end = enderecoMapper.toEntity(dto.endereco());
+        List<Endereco> end = dto.endereco()
+                                    .stream()
+                                    .map(enderecoMapper::toEntity)
+                                    .peek(endereco -> endereco.setUsuario(usuario))
+                                    .collect(Collectors.toList());
         usuario.setEndereco(end);
-        end.setUsuario(usuario);
 
         return mapper.toDTO(repository.save(usuario));
     }
 
     @Override
-    @Transactional
-    public Usuario atualizarUsuario(UsuarioUpdateDTO dto, UUID id) {
-         Usuario usuarioExistente = repository.findById(id).orElseThrow(() ->{
-            throw new EntityNotFoundException("Usuário não encontrado para o ID: " + id);
-        });
-        
-        mapper.updateUsuarioFromDto(dto, usuarioExistente);
-
-        return repository.save(usuarioExistente);
-
-        /*
-         * Implementar autenticação para atualizar senha
-         * verificar se ele sabe a senha atual e então permitir
-         */
+    public EnderecoPesquisaDTO cadastraEndereco(EnderecoCadastroDTO dto, Usuario user){
+        Endereco endereco = enderecoMapper.toEntity(dto);
+        endereco.setUsuario(user);
+        return enderecoMapper.toDTO(enderecoRepository.save(endereco));
     }
 
     @Override
-    public void deletarUsuario(UUID id) {
-        repository.findById(id).ifPresentOrElse(repository::delete,
-            () -> new EntityNotFoundException("Usuário não encontrado"));
+    @Transactional
+    public UsuarioPesquisaDTO atualizarUsuario(UsuarioUpdateDTO dto, Usuario usuario) {
+        validator.checkSenha(dto, usuario);
+        
+        mapper.updateUsuarioFromDto(dto, usuario);
+        return mapper.toDTO(repository.save(usuario));
+    }
+
+    @Override
+    public UsuarioPesquisaDTO atualizarSenha(Usuario user, String email,
+                                             String senhaAtual, String senhaNova){
+        validator.validarTrocaSenha(user, email, senhaAtual);
+        user.setSenha(passwordEncoder.encode(senhaNova));
+        System.out.println("NOVA SENHA: " + senhaNova);
+
+        return mapper.toDTO(repository.save(user));
+    }
+
+    @Override
+    public Usuario getAuthenticatedUsuario(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return Optional.ofNullable(repository.findByEmail(email))
+                    .orElseThrow(() -> new EntityNotFoundException("Login necessário"));
+    }
+
+    @Override
+    public List<EnderecoPesquisaDTO> getEnderecos(Usuario usuario){
+        List<Endereco> enderecos = enderecoRepository.getEnderecoByUsuario(usuario);
+        enderecos.forEach(System.out::println);
+        return enderecos.stream()   
+                        .map(enderecoMapper::toDTO)
+                        .collect(Collectors.toList());
     }
 
     @Override
@@ -96,14 +123,6 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public Usuario getAuthenticatedUsuario(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        return Optional.ofNullable(repository.findByEmail(email))
-                    .orElseThrow(() -> new EntityNotFoundException("Login necessário"));
-    }
-
-    @Override
     public UsuarioPesquisaDTO buscarPorEmailDTO(String email){
         return Optional.ofNullable(mapper.toDTO(repository.findByEmail(email)))
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
@@ -114,4 +133,11 @@ public class UsuarioService implements IUsuarioService {
         return Optional.ofNullable(repository.findByEmail(email))
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
     }
+
+    @Override
+    public void deletarUsuario(UUID id) {
+        repository.findById(id).ifPresentOrElse(repository::delete,
+            () -> new EntityNotFoundException("Usuário não encontrado"));
+    }        
+
 }
