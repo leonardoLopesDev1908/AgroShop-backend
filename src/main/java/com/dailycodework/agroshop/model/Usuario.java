@@ -47,9 +47,11 @@ public class Usuario {
 
     private String senha;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval=true, fetch= FetchType.LAZY)
+    private String telefone;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval=true, fetch= FetchType.LAZY)
     @JsonManagedReference
-    private Endereco endereco;
+    private List<Endereco> endereco;
 
     @OneToOne(mappedBy = "usuario", cascade= CascadeType.ALL, orphanRemoval=true)
     private Carrinho carrinho;
@@ -62,4 +64,5 @@ public class Usuario {
     @JoinTable(name = "usuario_roles", joinColumns= @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
                             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles = new HashSet<>();
+
 }

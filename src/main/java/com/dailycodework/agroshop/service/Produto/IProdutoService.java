@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.dailycodework.agroshop.controller.dto.cadastro.ProdutoCadastroDTO;
+import com.dailycodework.agroshop.controller.dto.pesquisa.ProdutoPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.update.ProdutoUpdateDTO;
 import com.dailycodework.agroshop.model.Produto;
 
@@ -29,13 +30,15 @@ public interface IProdutoService {
     
     List<Produto> getProdutoPorMarcarENome(String marca, String nome);
     
-    List<Produto> getProdutoPorNome(String nome);
+    List<ProdutoPesquisaDTO> getProdutoPorNome(String nome);
     
-    List<Produto> getProdutoPorMarca(String marca);
+    List<ProdutoPesquisaDTO> getProdutoPorMarca(String marca);
     
-    List<Produto> getProdutoPorCategoria(String categoria);
+    List<ProdutoPesquisaDTO> getProdutoPorCategoria(String categoria);
 
     List<Produto> findDistinctProdutodsByNome();
+
+    List<ProdutoPesquisaDTO> findOutrosProdutos(String categoria);
 
     Integer getEstoque(Long id);
 }

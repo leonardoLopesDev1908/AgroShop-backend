@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.dailycodework.agroshop.controller.dto.cadastro.ProdutoCadastroDTO;
+import com.dailycodework.agroshop.controller.dto.pesquisa.ProdutoPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.update.ProdutoUpdateDTO;
 import com.dailycodework.agroshop.controller.mapper.ProdutoMapper;
 import com.dailycodework.agroshop.model.Carrinho;
@@ -43,11 +44,9 @@ public class ProdutoService implements IProdutoService{
     private final ProdutoMapper mapper;
 
     private final CategoriaService categoriaService;
-    
     private final CategoriaRepository categoriaRepository;
 
     private final ItemCarrinhoRepository itemCarrinhoRepository;
-
     private final ItemPedidoRepository itemPedidoRepository;
 
     @Override
@@ -152,18 +151,33 @@ public class ProdutoService implements IProdutoService{
     }
 
     @Override
-    public List<Produto> getProdutoPorNome(String nome) {
-       return repository.findByNomeContaining(nome);
+    public List<ProdutoPesquisaDTO> getProdutoPorNome(String nome) {
+       return repository.findByNomeContaining(nome).stream()
+                                    .map(mapper::toDTO)
+                                    .collect(Collectors.toList());
     }
 
     @Override
-    public List<Produto> getProdutoPorMarca(String marca) {
-        return repository.findByMarcaContaining(marca);
+    public List<ProdutoPesquisaDTO> getProdutoPorMarca(String marca) {
+        return repository.findByMarcaContaining(marca).stream()
+                                .map(mapper::toDTO)
+                                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Produto> getProdutoPorCategoria(String categoria) {
-        throw new RuntimeException("");
+    public List<ProdutoPesquisaDTO> getProdutoPorCategoria(String categoriaStr) {
+        Categoria categoria = categoriaService.buscaPorNome(categoriaStr);
+        return repository.findByCategoria(categoria).stream()
+                                        .map(mapper::toDTO)
+                                        .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProdutoPesquisaDTO> findOutrosProdutos(String categoriaStr){
+        Categoria categoria = categoriaService.buscaPorNome(categoriaStr);
+        return repository.findTop10ByCategoriaNotOrCategoriaIsNull(categoria).stream()
+                                    .map(mapper::toDTO)
+                                    .collect(Collectors.toList());
     }
 
     @Override
