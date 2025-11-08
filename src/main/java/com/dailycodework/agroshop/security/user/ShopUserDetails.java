@@ -33,7 +33,7 @@ public class ShopUserDetails implements UserDetails{
         List<GrantedAuthority> authorities = usuario.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getNome()))
                 .collect(Collectors.toList());
-        
+            
         return new ShopUserDetails(
             usuario.getId(),
             usuario.getEmail(),
