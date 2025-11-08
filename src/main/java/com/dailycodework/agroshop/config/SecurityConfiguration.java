@@ -64,6 +64,7 @@ public class SecurityConfiguration {
         };
 
         GERENTE_ENDPOINTS = new String[] {
+            API + "/dashboard/**"
         };
 
         AUTHENTICATED_ENDPOINTS = new String[] {
