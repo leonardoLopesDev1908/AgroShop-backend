@@ -63,9 +63,7 @@ public class ProdutoController {
 
     @GetMapping("/produto/{nome}")
     public ResponseEntity<ApiResponse> getProdutoByNome(@PathVariable String nome){
-        List<ProdutoPesquisaDTO> dto = service.getProdutoPorNome(nome).stream() 
-                .map(mapper::toDTO)
-            .collect(Collectors.toList());
+        List<ProdutoPesquisaDTO> dto = service.getProdutoPorNome(nome);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
     }
 
@@ -97,4 +95,15 @@ public class ProdutoController {
         
     }
 
+    @GetMapping("/produtos/categoria")
+    public ResponseEntity<ApiResponse> getCategoria(@RequestParam String categoria){
+        List<ProdutoPesquisaDTO> produtos = service.getProdutoPorCategoria(categoria);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", produtos));
+    }
+
+    @GetMapping("/produtos/outros")
+    public ResponseEntity<ApiResponse> getOutros(@RequestParam String categoria){
+        List<ProdutoPesquisaDTO> produtos = service.findOutrosProdutos(categoria);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", produtos));
+    }
 }
