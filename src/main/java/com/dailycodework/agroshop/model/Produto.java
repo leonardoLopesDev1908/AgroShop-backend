@@ -52,6 +52,9 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true, fetch= FetchType.EAGER)
     private List<Imagem> imagens;
+
+    @OneToMany(mappedBy = "produto", fetch=FetchType.EAGER)
+    private List<Avaliacao> avaliacoes;
     
     public Produto(String nome, String marca, BigDecimal preco, 
         int estoque, Categoria categoria, String descricao){

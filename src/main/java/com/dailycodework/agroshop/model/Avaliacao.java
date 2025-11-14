@@ -1,6 +1,6 @@
 package com.dailycodework.agroshop.model;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,31 +10,41 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Endereco {
+@AllArgsConstructor
+public class Avaliacao {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
 
-    private String endereco;
-    private String numero;
-    private String complemento;
-    private String cidade;
-    private String estado;
-    private String cep;
+    private String titulo;
+
+    private Double nota;
+
+    private String comentario;
+
+    private LocalDateTime data;
+    
+    private String codigoPublico;
 
     @ManyToOne
     @JoinColumn(name="usuario_id")
     @JsonIgnore
     private Usuario usuario;
+
+    @ManyToOne
+    @JoinColumn(name="produto_id")
+    @JsonIgnore
+    private Produto produto;
 }
