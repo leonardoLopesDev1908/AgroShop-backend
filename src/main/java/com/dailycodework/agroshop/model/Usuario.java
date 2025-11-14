@@ -53,6 +53,10 @@ public class Usuario {
     @JsonManagedReference
     private List<Endereco> endereco;
 
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Avaliacao> avaliacoes;
+
     @OneToOne(mappedBy = "usuario", cascade= CascadeType.ALL, orphanRemoval=true)
     private Carrinho carrinho;
 
