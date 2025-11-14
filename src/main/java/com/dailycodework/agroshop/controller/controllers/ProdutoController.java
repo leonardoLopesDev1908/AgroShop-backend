@@ -50,7 +50,7 @@ public class ProdutoController {
                         .map(mapper::toDTO)
                         .collect(Collectors.toList()); 
                                             
-        produtoPesquisaDTOs.forEach(System.out::println);
+        //produtoPesquisaDTOs.forEach(System.out::println);
 
         return ResponseEntity.ok(new ApiResponse("Sucesso!", produtoPesquisaDTOs));
     }
