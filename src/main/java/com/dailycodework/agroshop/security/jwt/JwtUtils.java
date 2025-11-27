@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.dailycodework.agroshop.security.oauth2.CustomOAuth2User;
 import com.dailycodework.agroshop.security.user.ShopUserDetails;
 
 import io.jsonwebtoken.JwtException;
@@ -42,6 +43,15 @@ public class JwtUtils {
             .setIssuedAt(new Date())
             .setExpiration(calculateExpirationDate(expirationTime))
             .signWith(key(), SignatureAlgorithm.HS256).compact();
+    }
+
+    public String generateJwtTokenOAuth2(CustomOAuth2User oAuth2User){
+        return Jwts.builder()
+                .setSubject(oAuth2User.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(calculateExpirationDate(expirationTime))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
     }
 
     public String generateRefreshToken(String email){

@@ -20,6 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.dailycodework.agroshop.security.jwt.AuthTokenFilter;
 import com.dailycodework.agroshop.security.jwt.JwtEntryPoint;
+import com.dailycodework.agroshop.security.oauth2.CustomOAuth2UserService;
+import com.dailycodework.agroshop.security.oauth2.OAuth2LoginSuccessHandler;
 import com.dailycodework.agroshop.security.user.ShopUserDetailsService;
 
 import jakarta.annotation.PostConstruct;
@@ -33,7 +35,9 @@ public class SecurityConfiguration {
     
     private final ShopUserDetailsService userDetailsService;
     private final JwtEntryPoint authEntryPoint;
-    
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
+
     @Value("${api.prefix}")
     private String API;
 
@@ -48,12 +52,12 @@ public class SecurityConfiguration {
             API + "/css/**", "/js/**", "/images/**", "/webjars/**",
             API + "/login/**",
             API + "/auth/**",
+            API + "/oauth2/**",
             API + "/produtos/distintos/produtos",
             API + "/produtos/produtos",
             API + "/imagens/imagem/download/**",
             API + "/usuarios/cadastrar",
-            API + "/produtos/produto/*/produto",
-            API + "/comentarios/comentarios/**" 
+            API + "/produtos/produto/*/produto"
         };
         
         FUNCIONARIO_ENDPOINTS = new String[] {
@@ -71,9 +75,7 @@ public class SecurityConfiguration {
         AUTHENTICATED_ENDPOINTS = new String[] {
             API + "/carrinho/**",
             API + "/itens/**",
-            API + "/pedidos/**",
-            API + "/comentarios/comentar/**",
-            API + "/comentarios/comentario/excluir"
+            API + "/pedidos/**"
         };
     }
 
@@ -108,7 +110,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     
-        return http
+        http
             .csrf(AbstractHttpConfigurer::disable)
             .cors(Customizer.withDefaults())
             .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
@@ -129,7 +131,12 @@ public class SecurityConfiguration {
                 .permitAll()
                 .defaultSuccessUrl("/", true)    
             )
-            .build();
+            .oauth2Login(oauth2 -> oauth2
+                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                .successHandler(oAuth2LoginSuccessHandler)
+            );
+
+        return http.build();
     }
 /* 
     @Bean
