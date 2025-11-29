@@ -46,6 +46,18 @@ public class Produto {
     @Column
     private String descricao ;
 
+    @Column 
+    private BigDecimal peso;
+
+    @Column 
+    private BigDecimal altura;
+
+    @Column 
+    private BigDecimal largura;
+
+    @Column 
+    private BigDecimal comprimento;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Categoria categoria;

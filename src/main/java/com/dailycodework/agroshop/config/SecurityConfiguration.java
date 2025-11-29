@@ -57,7 +57,8 @@ public class SecurityConfiguration {
             API + "/produtos/produtos",
             API + "/imagens/imagem/download/**",
             API + "/usuarios/cadastrar",
-            API + "/produtos/produto/*/produto"
+            API + "/produtos/produto/*/produto",
+            API + "/melhorenvio/frete/produto/cotar"
         };
         
         FUNCIONARIO_ENDPOINTS = new String[] {
@@ -75,7 +76,8 @@ public class SecurityConfiguration {
         AUTHENTICATED_ENDPOINTS = new String[] {
             API + "/carrinho/**",
             API + "/itens/**",
-            API + "/pedidos/**"
+            API + "/pedidos/**",
+            API + "/melhorenvio/frete/itens/cotar"
         };
     }
 
