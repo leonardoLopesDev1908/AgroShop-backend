@@ -1,28 +1,30 @@
 pipeline {
     agent any
 
-    stages{ 
+    stages {
 
-        stage('Start DB') {
+        stage('Subir banco') {
             steps {
-                sh 'docker compose up -d db'
+                sh 'docker compose down || true'    
+                sh 'docker compose up -d'            
+                sh 'sleep 10'                       
             }
         }
-        
-        stage('Checkout'){
-            steps{
+
+        stage('Checkout') {
+            steps {
                 checkout scm
             }
         }
 
         stage('Build') {
-            steps{
+            steps {
                 sh './mvnw clean package -DskipTests'
             }
         }
 
-        stage('Test'){
-            steps{
+        stage('Test') {
+            steps {
                 sh './mvnw test'
             }
         }
