@@ -22,5 +22,13 @@ public record ProdutoCadastroDTO(
                 @NotBlank(message="Campo obrigatório")
                 String descricao,
                 @NotNull(message="Campo obrigatório")
-                Categoria categoria
+                Categoria categoria,
+                @NotNull(message="Campo obrigatório")
+                BigDecimal peso,
+                @NotNull(message="Campo obrigatório")
+                BigDecimal altura,
+                @NotNull(message="Campo obrigatório")
+                BigDecimal largura,
+                @NotNull(message="Campo obrigatório")
+                BigDecimal comprimento
 ) {}
