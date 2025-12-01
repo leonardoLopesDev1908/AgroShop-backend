@@ -1,9 +1,9 @@
 services:
   db:
-    image: postgres:16
+    image: mysql:8
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: meu_banco
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: agroshop
     ports:
-      - "5432:5432"
+      - "3306:3306"
