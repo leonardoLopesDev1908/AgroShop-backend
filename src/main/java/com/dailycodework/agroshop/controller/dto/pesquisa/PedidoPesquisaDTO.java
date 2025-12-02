@@ -1,5 +1,6 @@
 package com.dailycodework.agroshop.controller.dto.pesquisa;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -10,5 +11,6 @@ public record PedidoPesquisaDTO(
                     LocalDateTime data,
                     Set<ItemPedidoPesquisaDTO> itens,
                     PedidoStatus status,
-                    UsuarioPesquisaDTO usuario
+                    UsuarioPesquisaDTO usuario,
+                    BigDecimal frete
 ) {}
