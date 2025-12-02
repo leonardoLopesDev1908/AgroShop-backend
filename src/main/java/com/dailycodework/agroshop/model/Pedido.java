@@ -43,10 +43,13 @@ public class Pedido {
     private BigDecimal valorTotal;
 
     @Column
+    private BigDecimal frete;
+
+    @Column
     @Enumerated(EnumType.STRING)
     private PedidoStatus status;
 
-    @ManyToOne //"ManyToOne side as the owning side"
+    @ManyToOne 
     @JoinColumn(name = "usuario_id")    
     private Usuario usuario;
 

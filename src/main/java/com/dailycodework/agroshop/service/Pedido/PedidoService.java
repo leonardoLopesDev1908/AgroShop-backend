@@ -41,14 +41,14 @@ public class PedidoService implements IPedidoService{
 
     @Override
     @Transactional
-    public PedidoPesquisaDTO fazerPedido(UUID usuarioId) {
+    public PedidoPesquisaDTO fazerPedido(UUID usuarioId, BigDecimal frete) {
         Carrinho carrinho = carrinhoService.buscarPorIdUsuario(usuarioId);
         Pedido pedido = criarPedido(carrinho);
         List<ItemPedido> itens = criarItens(pedido, carrinho);
         //validator.validar(itens);
         pedido.setItens(new HashSet<>(itens));
-        pedido.setValorTotal(calcularValorTotal(itens));
-
+        pedido.setValorTotal(calcularValorTotal(itens).add(frete));
+        pedido.setFrete(frete);
         pedido.setData(LocalDateTime.now());
         
         Pedido pedidoSalvo = repository.save(pedido);

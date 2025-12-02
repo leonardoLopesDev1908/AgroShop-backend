@@ -1,5 +1,6 @@
 package com.dailycodework.agroshop.controller.controllers;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dailycodework.agroshop.controller.dto.pesquisa.FreteDTO;
 import com.dailycodework.agroshop.controller.dto.pesquisa.PedidoPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.update.StatusRequest;
 import com.dailycodework.agroshop.controller.mapper.PedidoMapper;
@@ -37,9 +39,9 @@ public class PedidoController {
     private final PedidoMapper mapper;
 
     @PostMapping("/usuario/solicitar")
-    public ResponseEntity<ApiResponse> fazerNovoPedido(){
+    public ResponseEntity<ApiResponse> fazerNovoPedido(@RequestBody FreteDTO frete){
         Usuario usuario = userService.getAuthenticatedUsuario();
-        PedidoPesquisaDTO dto = service.fazerPedido(usuario.getId());
+        PedidoPesquisaDTO dto = service.fazerPedido(usuario.getId(), BigDecimal.valueOf((Double.valueOf(frete.getPrice()))));
         return ResponseEntity.ok(new ApiResponse("Sucesso", dto));
     }
 

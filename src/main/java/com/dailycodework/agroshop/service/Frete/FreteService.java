@@ -6,8 +6,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
@@ -87,9 +90,10 @@ public class FreteService implements IFreteService{
 
             fretes = fretes.stream()    
                 .filter(frete -> frete.price != null)
+                .sorted(Comparator.comparing(FreteDTO::getPrice))
                 .collect(Collectors.toList());
 
-            return fretes;
+            return fretes.subList(0, 3);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -112,11 +116,13 @@ public class FreteService implements IFreteService{
             List<FreteDTO> fretes = objectMapper.readValue(response.body(), 
                         objectMapper.getTypeFactory().constructCollectionType(List.class, FreteDTO.class));
             
-            return fretes.stream()  
+            fretes = fretes.stream()  
                     .filter(frete -> frete.price != null)
-                    .collect(Collectors.toList());
+                    .sorted(Comparator.comparing(FreteDTO::getPrice))
+                    .collect(toList());
+                    
+            return fretes.subList(0, 3);
             
-
         }catch(IOException | InterruptedException e){
             System.out.println(e.getMessage());
         }
