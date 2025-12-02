@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dailycodework.agroshop.controller.dto.pesquisa.FreteDTO;
 import com.dailycodework.agroshop.response.ApiResponse;
 import com.dailycodework.agroshop.service.Frete.FreteService;
+<<<<<<< HEAD
+=======
+import com.dailycodework.agroshop.service.Produto.ProdutoService;
+import com.dailycodework.agroshop.service.Usuario.UsuarioService;
+>>>>>>> ea682802b34cd590ef6ffe4c92700b4f36d15b90
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +32,11 @@ public class FreteAuthController {
     @Value("${melhorenvio.token}")
     private String token;
 
+<<<<<<< HEAD
+=======
+    private final ProdutoService serviceProduto;
+    private final UsuarioService serviceUsuario;
+>>>>>>> ea682802b34cd590ef6ffe4c92700b4f36d15b90
     private final FreteService service;
     
     @PostMapping("/frete/produto/cotar")

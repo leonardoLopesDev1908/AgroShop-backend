@@ -23,7 +23,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
@@ -49,7 +48,7 @@ public class FreteService implements IFreteService{
             .connectTimeout(Duration.ofSeconds(30))
             .build();
     }
-    
+
     @Override
     public List<FreteDTO> freteProduto(Long idProduto, String cepDestino) throws IOException, InterruptedException{
         Produto produto = serviceProduto.buscarPorId(idProduto);
