@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -39,8 +40,16 @@ public class FreteService implements IFreteService{
     private final ProdutoService serviceProduto;
     private final UsuarioService serviceUsuario;
     private final ObjectMapper objectMapper;
-    private final HttpClient httpClient;
 
+    private HttpClient httpClient; 
+    
+    @PostConstruct
+    public void init() {
+        this.httpClient = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(30))
+            .build();
+    }
+    
     @Override
     public List<FreteDTO> freteProduto(Long idProduto, String cepDestino) throws IOException, InterruptedException{
         Produto produto = serviceProduto.buscarPorId(idProduto);

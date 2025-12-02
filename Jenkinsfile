@@ -1,33 +1,33 @@
 pipeline {
     agent any
-
+    
     stages {
-
-        stage('Subir banco') {
+        stage('Start Services') {
             steps {
-                sh 'docker compose down || true'    
-                sh 'docker compose up -d'            
-                sh 'sleep 10'                       
+                sh 'docker-compose up -d'
+                sh '''
+                    while ! docker-compose exec mysql mysqladmin ping -h localhost --silent; do
+                        sleep 5
+                    done
+                '''
             }
         }
-
-        stage('Checkout') {
+        
+        stage('Run Tests') {
+            environment {
+                SPRING_DATASOURCE_URL = 'jdbc:mysql://localhost:3307/testdb'
+                SPRING_DATASOURCE_USERNAME = 'root'
+                SPRING_DATASOURCE_PASSWORD = 'secret'
+            }
             steps {
-                checkout scm
+                sh './mvnw clean test'
             }
         }
-
-        stage('Build') {
+        
+        stage('Stop Services') {
             steps {
-                sh './mvnw clean package -DskipTests'
+                sh 'docker-compose down'
             }
         }
-
-        stage('Test') {
-            steps {
-                sh './mvnw test'
-            }
-        }
-
     }
 }
