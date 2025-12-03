@@ -1,6 +1,6 @@
 pipeline {
 	agent any
-	
+
 	stages{
 		stage('Build DB'){
 			steps{
@@ -16,6 +16,9 @@ pipeline {
 		}
 
 		stage('OWASP Dependency-Check Vulnerabilities') {
+			environment{
+				NVD_API_KEY=credentials('nvdApiKey')
+			}
 			steps {
 				dependencyCheck additionalArguments: ''' 
 							-o './'
