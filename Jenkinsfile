@@ -29,6 +29,12 @@ pipeline {
 				dependencyCheckPublisher pattern: 'dependency-check-report.xml'
 			}
 		}
+
+		stage('Tests'){
+			steps{
+				sh 'mvn test'
+			}
+		}
 	}
 	
 	post {
