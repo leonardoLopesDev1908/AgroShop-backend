@@ -3,10 +3,12 @@ package com.dailycodework.agroshop;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayName;   //
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.dailycodework.agroshop.model.Carrinho;
@@ -32,6 +34,15 @@ public class UsuarioRepositoryTest {
 
     @Autowired
     private PasswordEncoder encoder;
+
+    @TestConfiguration
+    static class Config {
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
+        }
+    }
 
     @Test
     @DisplayName("Testando cadastro de usuário")

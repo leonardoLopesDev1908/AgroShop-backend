@@ -73,7 +73,7 @@ public class UsuarioController {
     @DeleteMapping("/usuario/{id}/deletar")
     public ResponseEntity<ApiResponse> deleteUsuario(@PathVariable UUID id){
         service.deletarUsuario(id);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Deletado!", null));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse("Deletado!", null));
     }
 
     @GetMapping("/usuario/{email}")
