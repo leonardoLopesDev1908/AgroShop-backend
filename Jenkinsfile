@@ -16,9 +16,7 @@ pipeline {
 		}
 
 		stage('OWASP Dependency-Check Vulnerabilities') {
-			environment{
-				NVD_API_KEY:'leonardoSilva/81184126-957b-41aa-bb12-82914ba54eee'
-			}
+
 			steps {
 				dependencyCheck additionalArguments: ''' 
 							-o './'
