@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.5</version>
+		<version>3.4.1</version>
 		<relativePath/>
 	</parent>
 	<groupId>com.dailycodework</groupId>
@@ -37,6 +37,11 @@
 		<jjwt-jackson.version>0.11.5</jjwt-jackson.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.11.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
