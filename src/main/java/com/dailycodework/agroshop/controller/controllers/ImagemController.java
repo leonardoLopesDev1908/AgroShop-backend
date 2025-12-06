@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${api.prefix}/imagens")
+@RequestMapping("${api.prefix}/produto/imagens")
 public class ImagemController {
 
     private final IImagemService service;
@@ -46,7 +46,7 @@ public class ImagemController {
         }
     }
 
-    @GetMapping("/imagem/download/{id}")
+    @GetMapping("/{id}/download")
     public ResponseEntity<Resource> downloadImagem(@PathVariable Long id) throws SQLException{
         Imagem imagem = service.buscarImagemPorId(id);
         
@@ -71,7 +71,7 @@ public class ImagemController {
         }
     }
 
-    @DeleteMapping("/imagem/{id}/deletar")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deletarImagem(@PathVariable Long id){
         try {
             service.deletePorId(id);

@@ -21,7 +21,7 @@ import com.dailycodework.agroshop.service.Usuario.IUsuarioService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("${api.prefix}/itens")
+@RequestMapping("${api.prefix}/usuario")
 @RequiredArgsConstructor
 public class ItemCarrinhoController {
     
@@ -29,7 +29,7 @@ public class ItemCarrinhoController {
     private final IUsuarioService usuarioService;
     private final ICarrinhoService carrinhoService;
 
-    @PostMapping("/item/cadastrar")
+    @PostMapping("/me/carrinho/item")
     public ResponseEntity<ApiResponse> adicionarItemCarrinho(@RequestParam Long produtoId, @RequestParam int quantidade){
         Usuario usuario = usuarioService.getAuthenticatedUsuario();
         Carrinho carrinho = carrinhoService.novoCarro(usuario);    
@@ -37,7 +37,7 @@ public class ItemCarrinhoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
 
-    @DeleteMapping("/carrinho/item/{produtoId}/excluir")
+    @DeleteMapping("/me/carrinho/item/{produtoId}")
     public ResponseEntity<ApiResponse> excluirItem(@PathVariable Long produtoId){
         Usuario usuario = usuarioService.getAuthenticatedUsuario();
         Carrinho carrinho = carrinhoService.novoCarro(usuario);
@@ -45,10 +45,10 @@ public class ItemCarrinhoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
 
-    @PutMapping("/carrinho/atualizar")
+    @PutMapping("/carrinho/atualizacao")
     public ResponseEntity<ApiResponse> atualizarQuantidade(@RequestBody ItemCarrinhoUpdateDTO dto){
         Usuario user = usuarioService.getAuthenticatedUsuario();
-        Carrinho carrinho = carrinhoService.buscarPorIdUsuario(user.getId());
+        Carrinho carrinho = carrinhoService.buscarPorIdUsuario(user);
         service.atualizarQuantidade(carrinho.getId(), dto.produtoId(), dto.quantidade());
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }

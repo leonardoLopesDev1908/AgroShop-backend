@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.maven.wagon.authorization.AuthorizationException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import com.dailycodework.agroshop.controller.dto.cadastro.AvaliacaoCadastroDTO;
@@ -17,6 +19,7 @@ import com.dailycodework.agroshop.repository.AvaliacaoRepository;
 import com.dailycodework.agroshop.service.Produto.ProdutoService;
 import com.dailycodework.agroshop.service.Usuario.UsuarioService;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -55,8 +58,16 @@ public class AvaliacaoService implements IAvaliacaoService{
     }
 
     @Override
-    public void deleteAvaliacao(AvaliacaoPesquisaDTO dto) {
-        repository.deleteByCodigoPublico(dto.codigoPublico());
+    public void deleteAvaliacao(Usuario user, Long id) throws AuthorizationException {
+        Avaliacao avaliacao = repository.findById(id).orElseThrow(() -> {
+            throw new EntityNotFoundException("Avaliação não encontrada para esse id: " + id);
+        });
+
+        if(avaliacao.getUsuario().getId().equals(user.getId())){
+            repository.delete(avaliacao);
+        } else {
+            throw new AuthorizationException("Você não tem permissão para realizar essa ação");
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.dailycodework.agroshop.controller.controllers;
 
 import java.util.List;
 
+import org.apache.maven.wagon.authorization.AuthorizationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,33 +22,34 @@ import com.dailycodework.agroshop.service.Usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("${api.prefix}/avaliacoes")
+@RequestMapping("${api.prefix}/produtos")
 @RequiredArgsConstructor
 public class AvaliacaoController {
     
     private final AvaliacaoService service;
     private final UsuarioService userService;
 
-    @GetMapping("/avaliacoes/{idProduto}")
-    public ResponseEntity<ApiResponse> getComentarios(@PathVariable Long idProduto){
-        List<AvaliacaoPesquisaDTO> comentarios = service.findAvaliacoes(idProduto);
+    @GetMapping("/{produtoId}/avaliacoes")
+    public ResponseEntity<ApiResponse> getComentarios(@PathVariable Long produtoId){
+        List<AvaliacaoPesquisaDTO> comentarios = service.findAvaliacoes(produtoId);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", comentarios));
     } 
 
-    @PostMapping("/avaliar/{idProduto}")
+    @PostMapping("/{produtoId}/avaliar")
     public ResponseEntity<ApiResponse> fazerComentario(@RequestBody AvaliacaoCadastroDTO dto,
-                                                       @PathVariable Long idProduto){
-        AvaliacaoPesquisaDTO comentario = service.addAvaliacao(dto, idProduto);
+                                                       @PathVariable Long produtoId){
+        AvaliacaoPesquisaDTO comentario = service.addAvaliacao(dto, produtoId);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", comentario));
     }
 
-    @DeleteMapping("/avaliacao/excluir")
-    public ResponseEntity<ApiResponse> excluirComentario(@RequestBody AvaliacaoPesquisaDTO dto){
-        service.deleteAvaliacao(dto);
-        return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
+    @DeleteMapping("/avaliacao/{avaliacaoId}/excluir")
+    public ResponseEntity<ApiResponse> excluirComentario(@PathVariable Long avaliacaoId) throws AuthorizationException{
+        Usuario user = userService.getAuthenticatedUsuario();
+        service.deleteAvaliacao(user, avaliacaoId);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
 
-    @GetMapping("/existe/{idProduto}")
+    @GetMapping("/avialicao/{idProduto}/existe")
     public ResponseEntity<ApiResponse> existeAvaliacao(@PathVariable Long idProduto){
         Usuario user = userService.getAuthenticatedUsuario();
         boolean response = service.verificarAvaliacao(user, idProduto);

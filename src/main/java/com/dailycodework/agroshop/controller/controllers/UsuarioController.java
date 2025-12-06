@@ -36,20 +36,14 @@ public class UsuarioController {
     private final IUsuarioService service;
     private final UsuarioMapper mapper;
 
-    // @GetMapping("usuario/{id}/usuario")
-    // public ResponseEntity<ApiResponse> getUsuarioPorId(@PathVariable UUID id){
-    //     UsuarioPesquisaDTO usuario = service.buscarPorId(id);
-    //     return ResponseEntity.ok(new ApiResponse("Sucesso!", usuario));
-    // }
-
-    @GetMapping("/usuario/dados")
+    @GetMapping("/me/dados")
     public ResponseEntity<ApiResponse> getDados(){
         Usuario usuario = service.getAuthenticatedUsuario();
         UsuarioPesquisaDTO dto = mapper.toDTO(usuario);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
     }
 
-    @PutMapping("/usuario/alterar-senha")
+    @PutMapping("/me/senha")
     public ResponseEntity<ApiResponse> alterarSenha(@RequestBody AlterarSenhaDTO dto){
         System.out.println("CONTROLLER");
         Usuario user = service.getAuthenticatedUsuario();
@@ -58,45 +52,45 @@ public class UsuarioController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dtoUser));                                                
     }
 
-    @GetMapping("usuario/{nome}/usuarios")
+    @GetMapping("/usuario/{nome}")
     public ResponseEntity<ApiResponse> getUsuariosPorNome(@PathVariable String nome){
         List<UsuarioPesquisaDTO> usuarios = service.buscarPorNome(nome);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", usuarios));
     }
 
-    @PostMapping("/cadastrar")
+    @PostMapping("/cadastro")
     public ResponseEntity<ApiResponse> cadastrarUsuario(@Valid @RequestBody UsuarioCadastroDTO dto){
         UsuarioPesquisaDTO usuario = service.addUsuario(dto);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", usuario));
     }
 
-    @DeleteMapping("/usuario/{id}/deletar")
+    @DeleteMapping("/usuario/{id}")
     public ResponseEntity<ApiResponse> deleteUsuario(@PathVariable UUID id){
         service.deletarUsuario(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse("Deletado!", null));
     }
 
-    @GetMapping("/usuario/{email}")
-    public ResponseEntity<ApiResponse> getUsuarioPorEmail(@PathVariable String email){
-        UsuarioPesquisaDTO dto = service.buscarPorEmailDTO(email);
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<ApiResponse> getUsuarioPorEmail(@PathVariable UUID id){
+        UsuarioPesquisaDTO dto = service.buscarPorId(id);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
     }
 
-    @GetMapping("/usuario/endereco")
+    @GetMapping("/me/enderecos")
     public ResponseEntity<ApiResponse> getEnderecoUsuario(){
         Usuario usuario = service.getAuthenticatedUsuario();
         List<EnderecoPesquisaDTO> enderecos = service.getEnderecos(usuario);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", enderecos));
     }
 
-    @PostMapping("/endereco/cadastrar")
+    @PostMapping("/me/endereco/cadastro")
     public ResponseEntity<ApiResponse> cadastrarEndereco(@RequestBody EnderecoCadastroDTO dto){
         Usuario user = service.getAuthenticatedUsuario();
         EnderecoPesquisaDTO response = service.cadastraEndereco(dto, user);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", response));
     }
 
-    @PutMapping("/usuario/atualizar")
+    @PutMapping("/me/atualizacao")
     public ResponseEntity<ApiResponse> atualizarUsuario(@RequestBody UsuarioUpdateDTO dto){
         Usuario user = service.getAuthenticatedUsuario();
         UsuarioPesquisaDTO response = service.atualizarUsuario(dto, user);

@@ -35,7 +35,7 @@ public class ProdutoController {
     private final IProdutoService service;
     private final ProdutoMapper mapper;
 
-    @GetMapping("/produtos")
+    @GetMapping("/pesquisa")
     public ResponseEntity<ApiResponse> getAllProdutos(
                                             @RequestParam(value = "search", required=false) String search,
                                             @RequestParam(value = "categoria", required=false) String categoria,
@@ -50,12 +50,10 @@ public class ProdutoController {
                         .map(mapper::toDTO)
                         .collect(Collectors.toList()); 
                                             
-        //produtoPesquisaDTOs.forEach(System.out::println);
-
         return ResponseEntity.ok(new ApiResponse("Sucesso!", produtoPesquisaDTOs));
     }
 
-    @GetMapping("/produto/{id}/produto")
+    @GetMapping("/produto/{id}")
     public ResponseEntity<ApiResponse> getProduto(@PathVariable Long id){
         ProdutoPesquisaDTO dto = mapper.toDTO(service.buscarPorId(id));
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
@@ -67,26 +65,26 @@ public class ProdutoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
     }
 
-    @PostMapping("/cadastrar")
+    @PostMapping("/cadastro")
     public ResponseEntity<ApiResponse> cadastroProduto(@Valid @RequestBody ProdutoCadastroDTO dto){
         ProdutoPesquisaDTO produto = mapper.toDTO(service.addProduto(dto));
         return ResponseEntity.ok(new ApiResponse("Sucesso!", produto));
     }
 
-    @DeleteMapping("/produto/deletar/{id}")
+    @DeleteMapping("/produto/{id}")
     public ResponseEntity<ApiResponse> deletarProduto(@PathVariable Long id){
         service.deletarProdutoPorId(id);
         return ResponseEntity.ok(new ApiResponse("Deletado!", null));
     }   
 
-    @PutMapping("/produto/atualizar/{id}")
+    @PutMapping("/produto/{id}/atualizacao")
     public ResponseEntity<ApiResponse> atualizaProduto(@PathVariable Long id, 
                                                        @RequestBody ProdutoUpdateDTO dto){
         ProdutoPesquisaDTO novoProduto = mapper.toDTO(service.atualizarProduto(id, dto));
         return ResponseEntity.ok(new ApiResponse("Sucesso!", novoProduto));
     }
 
-    @GetMapping("/distintos/produtos")
+    @GetMapping("/produtos/distintos")
     public ResponseEntity<ApiResponse> getDistintosPorNome(){
         List<ProdutoPesquisaDTO> produtos = service.findDistinctProdutodsByNome().stream()
                                                 .map(mapper::toDTO)
@@ -95,13 +93,13 @@ public class ProdutoController {
         
     }
 
-    @GetMapping("/produtos/categoria")
+    @GetMapping("/produto/categoria")
     public ResponseEntity<ApiResponse> getCategoria(@RequestParam String categoria){
         List<ProdutoPesquisaDTO> produtos = service.getProdutoPorCategoria(categoria);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", produtos));
     }
 
-    @GetMapping("/produtos/outros")
+    @GetMapping("/outros")
     public ResponseEntity<ApiResponse> getOutros(@RequestParam String categoria){
         List<ProdutoPesquisaDTO> produtos = service.findOutrosProdutos(categoria);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", produtos));
