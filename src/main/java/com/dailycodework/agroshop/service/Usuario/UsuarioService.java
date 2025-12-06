@@ -107,10 +107,11 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public Usuario buscarPorId(UUID id){
-        return repository.findById(id).orElseThrow(()->{
+    public UsuarioPesquisaDTO buscarPorId(UUID id){
+        Usuario user =  repository.findById(id).orElseThrow(()->{
             throw new EntityNotFoundException("Usuário não encontrado");
         });
+        return mapper.toDTO(user);
     }
 
     @Override

@@ -17,7 +17,7 @@ public interface IUsuarioService {
     UsuarioPesquisaDTO atualizarSenha(Usuario usuario, String email, String senhaAtual, String senhaNova);
     Usuario getAuthenticatedUsuario();
     List<EnderecoPesquisaDTO> getEnderecos(Usuario usuario);
-    Usuario buscarPorId(UUID id);
+    UsuarioPesquisaDTO buscarPorId(UUID id);
     List<UsuarioPesquisaDTO> buscarPorNome(String nome);
     UsuarioPesquisaDTO buscarPorEmailDTO(String email);
     Usuario buscarPorEmail(String email);

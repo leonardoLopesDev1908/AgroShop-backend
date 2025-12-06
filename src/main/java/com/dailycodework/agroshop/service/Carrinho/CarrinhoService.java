@@ -3,14 +3,12 @@ package com.dailycodework.agroshop.service.Carrinho;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.dailycodework.agroshop.controller.dto.pesquisa.ItemCarrinhoPesquisaDTO;
 import com.dailycodework.agroshop.controller.mapper.ItemCarrinhoMapper;
-import com.dailycodework.agroshop.controller.mapper.UsuarioMapper;
 import com.dailycodework.agroshop.model.Carrinho;
 import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.repository.CarrinhoRepository;
@@ -30,7 +28,6 @@ public class CarrinhoService implements ICarrinhoService {
     private final ItemCarrinhoRepository itemRepository;
     private final ItemCarrinhoMapper mapper;
     private final UsuarioService userService;
-    private final UsuarioMapper userMapper;
 
     @Override
     public Carrinho buscarCarrinho(Long id) {
@@ -40,8 +37,8 @@ public class CarrinhoService implements ICarrinhoService {
     }
 
     @Override
-    public Carrinho buscarPorIdUsuario(UUID id){
-        return repository.findByUsuarioId(id);
+    public Carrinho buscarPorIdUsuario(Usuario user){
+        return repository.findByUsuarioId(user.getId());
     }
 
     @Override
@@ -62,7 +59,7 @@ public class CarrinhoService implements ICarrinhoService {
 
     @Override
     public Carrinho novoCarro(Usuario usuario) {
-        return Optional.ofNullable(buscarPorIdUsuario(usuario.getId())).orElseGet(() -> {
+        return Optional.ofNullable(buscarPorIdUsuario(usuario)).orElseGet(() -> {
             Carrinho carrinho = new Carrinho();
             carrinho.setUsuario(usuario);
             return repository.save(carrinho);

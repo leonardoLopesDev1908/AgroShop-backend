@@ -30,7 +30,7 @@ import com.dailycodework.agroshop.service.Usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("${api.prefix}/pedidos")
+@RequestMapping("${api.prefix}/usuario")
 @RequiredArgsConstructor
 public class PedidoController {
     
@@ -38,21 +38,21 @@ public class PedidoController {
     private final UsuarioService userService;
     private final PedidoMapper mapper;
 
-    @PostMapping("/usuario/solicitar")
+    @PostMapping("/me/pedido")
     public ResponseEntity<ApiResponse> fazerNovoPedido(@RequestBody FreteDTO frete){
         Usuario usuario = userService.getAuthenticatedUsuario();
-        PedidoPesquisaDTO dto = service.fazerPedido(usuario.getId(), BigDecimal.valueOf((Double.valueOf(frete.getPrice()))));
+        PedidoPesquisaDTO dto = service.fazerPedido(usuario, BigDecimal.valueOf((Double.valueOf(frete.getPrice()))));
         return ResponseEntity.ok(new ApiResponse("Sucesso", dto));
     }
 
-    @GetMapping("/usuario/pedidos")
+    @GetMapping("/me/pedidos")
     public ResponseEntity<ApiResponse> buscarPedido(){
         Usuario usuario = userService.getAuthenticatedUsuario();
         List<PedidoPesquisaDTO> lista = service.pedidosUsuario(usuario.getId());
         return ResponseEntity.ok(new ApiResponse("Sucesso", lista));
     }
 
-    @GetMapping("/pesquisar")
+    @GetMapping("/pedidos/pesquisa")
     public ResponseEntity<ApiResponse> pesquisaPedidos(
                                             @RequestParam(value="id", required=false) Long id,
                                             @RequestParam(value="email", required=false) String email,
@@ -68,26 +68,26 @@ public class PedidoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", pedidosResponse));
     }
 
-    @GetMapping("/pedido/{id}")
+    @GetMapping("/me/pedido/{id}")
     public ResponseEntity<ApiResponse> buscarPedidosId(@PathVariable Long id){
         PedidoPesquisaDTO pedido = service.buscaPedidoPorId(id);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", pedido));
     }
 
-    @PutMapping("/pedido/{id}/atualizar")
+    @PutMapping("/pedido/{id}/atualizacao")
     public ResponseEntity<ApiResponse> atualizarPedido(@PathVariable Long id, 
                                                        @RequestBody StatusRequest request){                                                        
         PedidoPesquisaDTO pedido = service.atualizarPedido(id, request.getStatus());
         return ResponseEntity.ok(new ApiResponse("Sucesso!", pedido));
     }
 
-    @PutMapping("/pedido/{id}/cancelar")
+    @PutMapping("/me/pedido/{id}/cancelar")
     public ResponseEntity<ApiResponse> cancelarPedido(@PathVariable Long id){
         PedidoPesquisaDTO pedido = service.pedidoCancelar(id);
-        return ResponseEntity.ok(new ApiResponse("Cancelado!", pedido));
+        return ResponseEntity.ok(new ApiResponse("Cancelado com sucesso!", pedido));
     }
 
-    @DeleteMapping("/pedido/{id}/excluir")
+    @DeleteMapping("/pedido/{id}")
     public ResponseEntity<ApiResponse> excluirPedido(@PathVariable Long id){
         service.excluirPedido(id);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));

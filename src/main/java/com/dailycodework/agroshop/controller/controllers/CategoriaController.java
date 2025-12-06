@@ -26,12 +26,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${api.prefix}/categorias")
+@RequestMapping("${api.prefix}/produtos/categorias")
 public class CategoriaController {
 
     private final ICategoriaService service;
 
-    @GetMapping("/all")
+    @GetMapping("/todas")
     public ResponseEntity<ApiResponse> buscarTodasCategorias(){
         List<Categoria> categorias = service.getAllCategorias();
         return ResponseEntity.ok(new ApiResponse("Sucesso!", categorias));
@@ -48,7 +48,7 @@ public class CategoriaController {
         }
     }
 
-    @GetMapping("/categoria/{id}/categoria")
+    @GetMapping("/categoria/{id}")
     public ResponseEntity<ApiResponse> buscarCategoria(@PathVariable Long id){
         try {
             Categoria categoria = service.buscaPorId(id);
@@ -70,7 +70,7 @@ public class CategoriaController {
         }
     }
 
-    @DeleteMapping("/categoria/{id}/deletar")
+    @DeleteMapping("/categoria/{id}")
     public ResponseEntity<ApiResponse> deletarCategoria(@PathVariable Long id){
         try {
             service.deleteCategoria(id);
@@ -81,7 +81,7 @@ public class CategoriaController {
         }        
     }
 
-    @PutMapping("/categoria/{id}/atualizar")
+    @PutMapping("/categoria/{id}/atualizacao")
     public ResponseEntity<ApiResponse> atualizarCategoria(@RequestBody CategoriaCadastroDTO dto
                                                                     , @PathVariable Long id ){
         try {

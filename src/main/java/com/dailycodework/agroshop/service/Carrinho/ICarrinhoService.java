@@ -2,7 +2,6 @@ package com.dailycodework.agroshop.service.Carrinho;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 import com.dailycodework.agroshop.controller.dto.pesquisa.ItemCarrinhoPesquisaDTO;
 import com.dailycodework.agroshop.model.Carrinho;
@@ -10,7 +9,7 @@ import com.dailycodework.agroshop.model.Usuario;
 
 public interface ICarrinhoService {
     Carrinho buscarCarrinho(Long id);
-    Carrinho buscarPorIdUsuario(UUID id);
+    Carrinho buscarPorIdUsuario(Usuario user);
     Carrinho buscarPorEmailUsuario(String email);    
     void limparCarrinho(Long id);
     Carrinho novoCarro(Usuario usuario);    

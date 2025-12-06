@@ -18,6 +18,7 @@ import com.dailycodework.agroshop.model.Carrinho;
 import com.dailycodework.agroshop.model.ItemPedido;
 import com.dailycodework.agroshop.model.Pedido;
 import com.dailycodework.agroshop.model.Produto;
+import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.model.enums.PedidoStatus;
 import com.dailycodework.agroshop.repository.PedidoRepository;
 import com.dailycodework.agroshop.repository.PedidoSpecs;
@@ -41,8 +42,8 @@ public class PedidoService implements IPedidoService{
 
     @Override
     @Transactional
-    public PedidoPesquisaDTO fazerPedido(UUID usuarioId, BigDecimal frete) {
-        Carrinho carrinho = carrinhoService.buscarPorIdUsuario(usuarioId);
+    public PedidoPesquisaDTO fazerPedido(Usuario usuario, BigDecimal frete) {
+        Carrinho carrinho = carrinhoService.buscarPorIdUsuario(usuario);
         Pedido pedido = criarPedido(carrinho);
         List<ItemPedido> itens = criarItens(pedido, carrinho);
         //validator.validar(itens);

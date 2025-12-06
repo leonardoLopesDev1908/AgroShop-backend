@@ -17,7 +17,7 @@ import com.dailycodework.agroshop.service.Frete.FreteService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("${api.prefix}/melhorenvio")
+@RequestMapping("${api.prefix}")
 @RequiredArgsConstructor
 public class FreteAuthController {
     
@@ -29,7 +29,7 @@ public class FreteAuthController {
 
     private final FreteService service;
     
-    @PostMapping("/frete/produto/cotar")
+    @PostMapping("/produto/frete/cotacao")
     public ResponseEntity<ApiResponse> calcularFreteProduto(@RequestParam Long idProduto,
                                                             @RequestParam String cepDestino) 
                                                                 throws IOException, InterruptedException{
@@ -37,7 +37,7 @@ public class FreteAuthController {
             return ResponseEntity.ok(new ApiResponse("Sucesso!", fretes));
         }
 
-    @PostMapping("/frete/itens/cotar")
+    @PostMapping("/itens/frete/cotacao")
     public ResponseEntity<ApiResponse> calcularFreteItens(@RequestParam String cepDestino){
         List<FreteDTO> fretes = service.freteItensCarrinho(cepDestino);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", fretes));
