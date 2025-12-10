@@ -1,6 +1,8 @@
 package com.dailycodework.agroshop.utils;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.Cookie;
@@ -12,30 +14,39 @@ public class CookieUtils{
 
     @Value("${api.useSecureCookie}")
     private boolean useSecureCookie;
+    
+    public void addCsrfCookie(HttpServletResponse response, String token){
+        ResponseCookie cookie = ResponseCookie.from("XSRF-TOKEN", token)
+            .httpOnly(false)
+            .secure(useSecureCookie)
+            .path("/")
+            .sameSite("Lax")
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
 
     public void addRefreshTokenCookie(HttpServletResponse response, String refreshToken, long maxAge){
         if(response == null){
             throw new IllegalArgumentException("HttpServletResponse cannot be null");
         }
-
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setMaxAge((int)(maxAge / 1000));
         refreshTokenCookie.setSecure(useSecureCookie);  
-        String sameSite = useSecureCookie ? "None" : "Lax";
+        String sameSite = "Lax";
         setResponseHeader(response, refreshTokenCookie, sameSite);
     }
 
     private void setResponseHeader(HttpServletResponse response, Cookie refreshTokenCookie, String sameSite){
-        StringBuilder cookieHeader = new StringBuilder();
-        cookieHeader.append(refreshTokenCookie.getName()).append("=")
-                .append(refreshTokenCookie.getValue())
-                .append("; HttpOnly; Path=").append(refreshTokenCookie.getPath())
-                .append("; Max-Age=").append(refreshTokenCookie.getMaxAge())
-                .append(useSecureCookie ? "Secure" : "")
-                .append("; SameSite=").append(sameSite);
-        response.setHeader("Set-Cookie", cookieHeader.toString());
+        ResponseCookie cookie = ResponseCookie.from(refreshTokenCookie.getName(), refreshTokenCookie.getValue())
+            .httpOnly(true)
+            .secure(useSecureCookie)
+            .path("/")
+            .maxAge(refreshTokenCookie.getMaxAge())
+            .sameSite(sameSite)
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
     public String getRefreshTokenFromCookies(HttpServletRequest request){

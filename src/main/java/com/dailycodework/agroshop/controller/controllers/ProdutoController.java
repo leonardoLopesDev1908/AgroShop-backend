@@ -59,11 +59,11 @@ public class ProdutoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
     }
 
-    @GetMapping("/produto/{nome}")
-    public ResponseEntity<ApiResponse> getProdutoByNome(@PathVariable String nome){
-        List<ProdutoPesquisaDTO> dto = service.getProdutoPorNome(nome);
-        return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
-    }
+    // @GetMapping("/produto/{nome}")
+    // public ResponseEntity<ApiResponse> getProdutoByNome(@PathVariable String nome){
+    //     List<ProdutoPesquisaDTO> dto = service.getProdutoPorNome(nome);
+    //     return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
+    // }
 
     @PostMapping("/cadastro")
     public ResponseEntity<ApiResponse> cadastroProduto(@Valid @RequestBody ProdutoCadastroDTO dto){
