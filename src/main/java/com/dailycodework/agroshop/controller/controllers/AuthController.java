@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,12 +39,17 @@ public class AuthController {
     private Long refreshTokenExpirationTime;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticationUsuario(@RequestBody LoginRequest request, HttpServletResponse response){
+    public ResponseEntity<?> authenticationUsuario(@RequestBody LoginRequest request, 
+                                                    HttpServletRequest httpRequest, 
+                                                    HttpServletResponse response){
         Authentication authentication = authenticationManger
                     .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getSenha()));
         String accessToken = jwtUtils.generateAccessToken(authentication);
         String refreshToken = jwtUtils.generateRefreshToken(request.getEmail());
-        cookieUtils.addRefreshTokenCookie(response, refreshToken, refreshTokenExpirationTime);        
+
+        CsrfToken csrfToken = (CsrfToken) httpRequest.getAttribute("_csrf");
+        cookieUtils.addCsrfCookie(response, csrfToken.getToken());
+        // cookieUtils.addRefreshTokenCookie(response, refreshToken, refreshTokenExpirationTime);        
         
         Map<String, String> token = new HashMap<>();
         token.put("accessToken", accessToken);
