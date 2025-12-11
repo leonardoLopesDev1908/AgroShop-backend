@@ -26,6 +26,9 @@ public class ShopUserDetails implements UserDetails{
     private UUID id;
     private String email;
     private String senha;
+    private String nome;
+    private String sobrenome;
+    private String telefone;
 
     private Collection<GrantedAuthority> authorities;
 
@@ -38,6 +41,9 @@ public class ShopUserDetails implements UserDetails{
             usuario.getId(),
             usuario.getEmail(),
             usuario.getSenha(),
+            usuario.getNome(),
+            usuario.getSobrenome(),
+            usuario.getTelefone(),
             authorities
         );
     }
@@ -57,4 +63,15 @@ public class ShopUserDetails implements UserDetails{
         return email;
     }  
     
+    public String getNome(){
+        return nome;
+    }
+
+    public String getSobrenome(){
+        return sobrenome;
+    }
+
+    public String getTelefone(){
+        return telefone;
+    }
 }

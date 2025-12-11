@@ -84,8 +84,6 @@ public class UsuarioService implements IUsuarioService {
                                              String senhaAtual, String senhaNova){
         validator.validarTrocaSenha(user, email, senhaAtual);
         user.setSenha(passwordEncoder.encode(senhaNova));
-        System.out.println("NOVA SENHA: " + senhaNova);
-
         return mapper.toDTO(repository.save(user));
     }
 
@@ -100,7 +98,6 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public List<EnderecoPesquisaDTO> getEnderecos(Usuario usuario){
         List<Endereco> enderecos = enderecoRepository.getEnderecoByUsuario(usuario);
-        enderecos.forEach(System.out::println);
         return enderecos.stream()   
                         .map(enderecoMapper::toDTO)
                         .collect(Collectors.toList());

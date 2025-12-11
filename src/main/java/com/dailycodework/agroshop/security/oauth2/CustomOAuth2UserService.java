@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.repository.UsuarioRepository;
+import com.dailycodework.agroshop.security.user.ShopUserDetails;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService{
@@ -22,23 +23,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
         
         OAuth2User oauth2User = super.loadUser(userRequest);
 
-        CustomOAuth2User customUser = new CustomOAuth2User(oauth2User);
-
-        String email = customUser.getEmail();
-        String name = customUser.getFirstName();
-        String lastName = customUser.getLastName();
+        String email = oauth2User.getAttribute("email");
+        String name = oauth2User.getAttribute("name");
 
         Usuario usuario = Optional.ofNullable(userRepository.findByEmail(email))
                             .orElseGet(() -> {
                                 Usuario novoUsuario = new Usuario();
                                 novoUsuario.setEmail(email);
                                 novoUsuario.setNome(name);
-                                novoUsuario.setSobrenome(lastName);
                                 return userRepository.save(novoUsuario);
                             });
 
-        userRepository.save(usuario);
-        return customUser;
+        ShopUserDetails shopUser = ShopUserDetails.buildUserDetails(usuario);
+                            
+        return new CustomOAuth2User(shopUser, oauth2User.getAttributes());
     }
 
 }

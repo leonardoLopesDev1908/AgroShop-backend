@@ -49,7 +49,7 @@ public class AvaliacaoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
 
-    @GetMapping("/avialicao/{idProduto}/existe")
+    @GetMapping("/avaliacao/{idProduto}/existe")
     public ResponseEntity<ApiResponse> existeAvaliacao(@PathVariable Long idProduto){
         Usuario user = userService.getAuthenticatedUsuario();
         boolean response = service.verificarAvaliacao(user, idProduto);

@@ -9,6 +9,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import com.dailycodework.agroshop.security.jwt.JwtUtils;
+import com.dailycodework.agroshop.utils.CookieUtils;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,8 +21,17 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private CookieUtils cookieUtils;
+
     @Value("${app.oauth2.redirect-url}")
     private String redirectString;
+
+    @Value("${auth.token.accessExpirationInMils}")
+    private Long accessTokenExpirationTime;
+    
+    @Value("${auth.token.refreshExpirationInMils}")
+    private Long refreshTokenExpirationTime;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -29,14 +39,14 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                                         Authentication authentication) 
                                 throws IOException, ServletException {
         
-        System.out.println("Redirect URL: " + redirectString);
-
         CustomOAuth2User oauth2User = (CustomOAuth2User) authentication.getPrincipal();
 
-        String token = jwtUtils.generateJwtTokenOAuth2(oauth2User);
+        String accessToken = jwtUtils.generateAccessTokenOAuth2(oauth2User);
+        String refreshToken = jwtUtils.generateRefreshTokenOAuth2(oauth2User);
 
-        String fullRedirectUrl = redirectString + "?token=" + token;
+        cookieUtils.addAccessTokenCookie(response, accessToken, accessTokenExpirationTime);
+        cookieUtils.addRefreshTokenCookie(response, refreshToken, refreshTokenExpirationTime);
         
-        getRedirectStrategy().sendRedirect(request, response, fullRedirectUrl);                            
+        getRedirectStrategy().sendRedirect(request, response, redirectString);                            
     }
 }

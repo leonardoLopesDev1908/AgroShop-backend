@@ -71,7 +71,7 @@ public class ProdutoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", produto));
     }
 
-    @DeleteMapping("/produto/{id}")
+    @DeleteMapping("/produto/{id}/excluir")
     public ResponseEntity<ApiResponse> deletarProduto(@PathVariable Long id){
         service.deletarProdutoPorId(id);
         return ResponseEntity.ok(new ApiResponse("Deletado!", null));
@@ -84,7 +84,7 @@ public class ProdutoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", novoProduto));
     }
 
-    @GetMapping("/produtos/distintos")
+    @GetMapping("/distintos")
     public ResponseEntity<ApiResponse> getDistintosPorNome(){
         List<ProdutoPesquisaDTO> produtos = service.findDistinctProdutodsByNome().stream()
                                                 .map(mapper::toDTO)
