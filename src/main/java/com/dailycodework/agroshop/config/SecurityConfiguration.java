@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 
 import com.dailycodework.agroshop.security.jwt.AuthTokenFilter;
 import com.dailycodework.agroshop.security.jwt.JwtEntryPoint;
@@ -134,17 +136,4 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-/* 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return web -> web.ignoring().requestMatchers(
-            "/v2/api-docs/**",
-            "/v3/api-docs/**",
-            "/swagger-resources/**",
-            "/swagger-ui.html",
-            "/swagger.ui/**",
-            "/webjars/**"
-        );
-    }
-    */
 }

@@ -14,6 +14,16 @@ public class CookieUtils{
 
     @Value("${api.useSecureCookie}")
     private boolean useSecureCookie;
+    
+    public void addCsrfCookie(HttpServletResponse response, String token){
+        ResponseCookie cookie = ResponseCookie.from("XSRF-TOKEN", token)
+            .httpOnly(false)
+            .secure(useSecureCookie)
+            .path("/")
+            .sameSite("Lax")
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
 
     public static final String ACCESS_TOKEN_COOKIE = "accessToken";
     public static final String REFRESH_TOKEN_COOKIE = "refreshToken";
