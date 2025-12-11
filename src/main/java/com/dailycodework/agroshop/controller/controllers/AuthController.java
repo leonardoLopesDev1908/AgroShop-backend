@@ -51,13 +51,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticationUsuario(@RequestBody LoginRequest request, HttpServletResponse response){
-
+      
         Authentication authentication = authenticationManger
                     .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getSenha()));
 
         String accessToken = jwtUtils.generateAccessToken(authentication);
         String refreshToken = jwtUtils.generateRefreshToken(request.getEmail());
-
+      
         cookieUtils.addAccessTokenCookie(response, accessToken, accessTokenExpirationTime);
         cookieUtils.addRefreshTokenCookie(response, refreshToken, refreshTokenExpirationTime);        
         
