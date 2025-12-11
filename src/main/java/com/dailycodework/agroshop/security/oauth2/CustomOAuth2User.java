@@ -6,38 +6,42 @@ import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import com.dailycodework.agroshop.security.user.ShopUserDetails;
+
 public class CustomOAuth2User implements OAuth2User{
 
-    private final OAuth2User oauth2User;
+    private final ShopUserDetails user;
+    private final Map<String, Object> attributes;
 
-    public CustomOAuth2User(OAuth2User oauth2User){
-        this.oauth2User = oauth2User;
+    public CustomOAuth2User(ShopUserDetails user, Map<String, Object> attributes){
+        this.user = user;
+        this.attributes = attributes;
     }
     
     @Override
     public Map<String, Object> getAttributes() {
-        return oauth2User.getAttributes();
+        return attributes;
     }
 
     @Override
     public String getName() {
-        return oauth2User.getAttribute("sub");
+        return user.getUsername();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-       return oauth2User.getAuthorities();
+       return user.getAuthorities();
     }
     
     public String getEmail(){
-        return oauth2User.getAttribute("email");
+        return user.getEmail();
     }   
 
     public String getFirstName(){
-        return oauth2User.getAttribute("name");
+        return user.getNome();
     }
 
     public String getLastName(){
-        return oauth2User.getAttribute("lastname");
+        return user.getSobrenome();
     }
 }

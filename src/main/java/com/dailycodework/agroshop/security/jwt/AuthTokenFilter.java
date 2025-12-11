@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.dailycodework.agroshop.response.ErroResponse;
 import com.dailycodework.agroshop.security.user.ShopUserDetailsService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.dailycodework.agroshop.utils.CookieUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.FilterChain;
@@ -26,6 +26,9 @@ public class AuthTokenFilter extends OncePerRequestFilter{
     @Autowired
     private JwtUtils jwtUtils;
     
+    @Autowired 
+    private CookieUtils cookieUtils;
+
     @Autowired
     private ShopUserDetailsService userDetailsService;
 
@@ -35,20 +38,21 @@ public class AuthTokenFilter extends OncePerRequestFilter{
                                     FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String jwt = parseJwt(request);
+            String jwt = cookieUtils.getAccessTokenFromCookies(request);
             if (StringUtils.hasText(jwt) && jwtUtils.validateToken(jwt)) {
                 String username = jwtUtils.getUsernameDoToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
+            filterChain.doFilter(request, response);
         } catch (Exception e) {
             sendErroResponse(response);
         }
-        filterChain.doFilter(request, response);
     }
 
     private void sendErroResponse(HttpServletResponse response) throws IOException{
+        System.out.println("ERROR RESPONSE USERDETAILS");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         ErroResponse erro = new ErroResponse("Acesso inválido");
@@ -57,12 +61,13 @@ public class AuthTokenFilter extends OncePerRequestFilter{
         response.getWriter().write(jsonResponse);
     }
 
-    public String parseJwt(HttpServletRequest request){
-        String headerAuth = request.getHeader("Authorization");
-        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
-            return headerAuth.substring(7);
-        }
-        return null;
-    }
+    /* Obsoleto com Cookies */
+    // public String parseJwt(HttpServletRequest request){
+    //     String headerAuth = request.getHeader("Authorization");
+    //     if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
+    //         return headerAuth.substring(7);
+    //     }
+    //     return null;
+    // }
     
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.dailycodework.agroshop.security.oauth2.CustomOAuth2User;
 import com.dailycodework.agroshop.security.user.ShopUserDetails;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,14 +31,16 @@ public class JwtUtils {
     private String refreshTime;
 
     public String generateAccessToken(Authentication authentication){
+        
         ShopUserDetails shop = (ShopUserDetails) authentication.getPrincipal();
 
         List<String> roles = shop.getAuthorities()
             .stream()
             .map(grantedAuthority -> grantedAuthority.getAuthority()).toList();
 
-         return Jwts.builder()
+        return Jwts.builder()
             .setSubject(shop.getEmail())   
+            .claim("type", "access")
             .claim("id", shop.getId())
             .claim("roles", roles)
             .setIssuedAt(new Date())
@@ -45,22 +48,34 @@ public class JwtUtils {
             .signWith(key(), SignatureAlgorithm.HS256).compact();
     }
 
-    public String generateJwtTokenOAuth2(CustomOAuth2User oAuth2User){
+    public String generateRefreshToken(String email){
         return Jwts.builder()
+            .claim("type", "refresh")
+            .setSubject(email)
+            .setIssuedAt(new Date())
+            .setExpiration(calculateExpirationDate(refreshTime))
+            .signWith(key(), SignatureAlgorithm.HS256)
+            .compact(); 
+    }
+
+    public String generateAccessTokenOAuth2(CustomOAuth2User oAuth2User){
+        return Jwts.builder()
+                .claim("type", "access")
                 .setSubject(oAuth2User.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(calculateExpirationDate(expirationTime))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateRefreshToken(String email){
+    public String generateRefreshTokenOAuth2(CustomOAuth2User oAuth2User){
         return Jwts.builder()
-                    .setSubject(email)
-                    .setIssuedAt(new Date())
-                    .setExpiration(calculateExpirationDate(expirationTime))
-                    .signWith(key(), SignatureAlgorithm.HS256)
-                    .compact(); 
+                .claim("type", "refresh")
+                .setSubject(oAuth2User.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(calculateExpirationDate(refreshTime))
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public String getUsernameDoToken(String token){
@@ -79,8 +94,28 @@ public class JwtUtils {
                     .parseClaimsJws(token);
             return true;
         } catch (JwtException e) {
-            throw new JwtException(e.getMessage());
+            return false;
         }
+    }
+
+    public boolean isRefreshToken(String token){
+        Claims claims = Jwts.parserBuilder()
+            .setSigningKey(key())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+            
+        return "refresh".equals(claims.get("type"));
+    }
+
+    public boolean isAccessToken(String token){
+        Claims claims = Jwts.parserBuilder()
+            .setSigningKey(key())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+            
+        return "access".equals(claims.get("type"));
     }
 
     private Date calculateExpirationDate(String expirationTimeString){

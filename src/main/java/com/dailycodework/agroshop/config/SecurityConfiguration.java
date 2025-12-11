@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -51,7 +50,7 @@ public class SecurityConfiguration {
         PUBLIC_ENDPOINTS = new String[] {
             API + "/css/**", "/js/**", "/images/**", "/webjars/**",
             API + "/login/**",
-            API + "/auth/**",
+            API + "/auth/login",
             API + "/oauth2/**",
             API + "/produtos/distintos/produtos",
             API + "/produtos/produtos",
@@ -74,6 +73,7 @@ public class SecurityConfiguration {
         };
 
         AUTHENTICATED_ENDPOINTS = new String[] {
+            API + "/auth/me",
             API + "/carrinho/**",
             API + "/itens/**",
             API + "/pedidos/**",
@@ -113,13 +113,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     
         http
-            .csrf(AbstractHttpConfigurer::disable)
+            .csrf(csrf -> csrf.disable())
             .cors(Customizer.withDefaults())
             .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authProvider())
             .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-            .httpBasic(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
@@ -127,11 +126,6 @@ public class SecurityConfiguration {
                 .requestMatchers(FUNCIONARIO_ENDPOINTS).hasAnyAuthority("Gerente", "Funcionario", "ADM")
                 .requestMatchers(GERENTE_ENDPOINTS).hasAuthority("Gerente")
                 .anyRequest().permitAll()
-            )
-            .formLogin(form -> 
-                form.loginPage("/login")
-                .permitAll()
-                .defaultSuccessUrl("/", true)    
             )
             .oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
