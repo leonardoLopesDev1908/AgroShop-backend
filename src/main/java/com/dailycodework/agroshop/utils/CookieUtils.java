@@ -45,7 +45,7 @@ public class CookieUtils{
             .secure(false)
             .path(path)
             .maxAge(maxAge / 1000)
-            .sameSite("None")
+            .sameSite("Lax")
             .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -81,7 +81,7 @@ public class CookieUtils{
             .secure(false)
             .path("/")
             .maxAge(0)
-            .sameSite("None")
+            .sameSite("Lax")
             .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE, "")
@@ -89,7 +89,7 @@ public class CookieUtils{
             .secure(false)
             .path("/")
             .maxAge(0)
-            .sameSite("None")
+            .sameSite("Lax")
             .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
