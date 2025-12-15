@@ -24,6 +24,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+//Talvez descartar esse Controller
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/produtos/categorias")
@@ -94,6 +96,3 @@ public class CategoriaController {
     }
 
 }
-
-
-//implementar SPECIFICATION

@@ -13,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dailycodework.agroshop.request.LoginRequest;
 import com.dailycodework.agroshop.security.jwt.JwtUtils;
-import com.dailycodework.agroshop.security.oauth2.CustomOAuth2UserService;
 import com.dailycodework.agroshop.security.user.ShopUserDetails;
 import com.dailycodework.agroshop.security.user.ShopUserDetailsService;
 import com.dailycodework.agroshop.utils.CookieUtils;
@@ -34,14 +32,12 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5174", allowCredentials = "true")
 public class AuthController {
     
     private final JwtUtils jwtUtils;
     private final CookieUtils cookieUtils;
     private final ShopUserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManger; 
-    private final CustomOAuth2UserService oAuth2UserService;
 
     @Value("${auth.token.accessExpirationInMils}")
     private Long accessTokenExpirationTime;

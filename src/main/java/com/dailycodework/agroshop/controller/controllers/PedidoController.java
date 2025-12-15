@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +43,8 @@ public class PedidoController {
     public ResponseEntity<ApiResponse> fazerNovoPedido(@RequestBody FreteDTO frete){
         Usuario usuario = userService.getAuthenticatedUsuario();
         PedidoPesquisaDTO dto = service.fazerPedido(usuario, BigDecimal.valueOf((Double.valueOf(frete.getPrice()))));
-        return ResponseEntity.ok(new ApiResponse("Sucesso", dto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse("Sucesso", dto));
     }
 
     @GetMapping("/me/pedidos")
@@ -52,7 +54,7 @@ public class PedidoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso", lista));
     }
 
-    @GetMapping("/pedidos/pesquisa")
+    @GetMapping("/pedidos")
     public ResponseEntity<ApiResponse> pesquisaPedidos(
                                             @RequestParam(value="id", required=false) Long id,
                                             @RequestParam(value="email", required=false) String email,
@@ -74,14 +76,14 @@ public class PedidoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", pedido));
     }
 
-    @PutMapping("/pedido/{id}/atualizacao")
+    @PutMapping("/pedido/{id}")
     public ResponseEntity<ApiResponse> atualizarPedido(@PathVariable Long id, 
                                                        @RequestBody StatusRequest request){                                                        
         PedidoPesquisaDTO pedido = service.atualizarPedido(id, request.getStatus());
         return ResponseEntity.ok(new ApiResponse("Sucesso!", pedido));
     }
 
-    @PutMapping("/me/pedido/{id}/cancelar")
+    @PutMapping("/me/pedido/{id}")
     public ResponseEntity<ApiResponse> cancelarPedido(@PathVariable Long id){
         PedidoPesquisaDTO pedido = service.pedidoCancelar(id);
         return ResponseEntity.ok(new ApiResponse("Cancelado com sucesso!", pedido));
@@ -90,6 +92,7 @@ public class PedidoController {
     @DeleteMapping("/pedido/{id}")
     public ResponseEntity<ApiResponse> excluirPedido(@PathVariable Long id){
         service.excluirPedido(id);
-        return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new ApiResponse("Pedido deletado!", null));
     }
 }

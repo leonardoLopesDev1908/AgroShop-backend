@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 import com.dailycodework.agroshop.security.jwt.AuthTokenFilter;
 import com.dailycodework.agroshop.security.jwt.JwtEntryPoint;
@@ -59,7 +59,8 @@ public class SecurityConfiguration {
             API + "/imagens/imagem/download/**",
             API + "/usuarios/cadastrar",
             API + "/produtos/produto/*/produto",
-            API + "/melhorenvio/frete/produto/cotar"
+            API + "/melhorenvio/frete/produto/cotar",
+            API + "/csrf"
         };
         
         FUNCIONARIO_ENDPOINTS = new String[] {
@@ -113,9 +114,15 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers(
+                    "/api/v1/auth/login"
+                )
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+            )
+            // .csrf(csrf -> csrf.disable())
             .cors(Customizer.withDefaults())
             .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
