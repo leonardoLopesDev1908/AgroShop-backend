@@ -16,8 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 import com.dailycodework.agroshop.security.jwt.AuthTokenFilter;
 import com.dailycodework.agroshop.security.jwt.JwtEntryPoint;
@@ -115,14 +113,14 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers(
-                    "/api/v1/auth/login"
-                )
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-            )
-            // .csrf(csrf -> csrf.disable())
+            // .csrf(csrf -> csrf
+            //     .ignoringRequestMatchers(
+            //         "/api/v1/auth/login"
+            //     )
+            //     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            //     .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+            // )
+            .csrf(csrf -> csrf.disable())
             .cors(Customizer.withDefaults())
             .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
