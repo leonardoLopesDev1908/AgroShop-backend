@@ -61,7 +61,8 @@ public class UsuarioController {
     @PostMapping("/cadastro")
     public ResponseEntity<ApiResponse> cadastrarUsuario(@Valid @RequestBody UsuarioCadastroDTO dto){
         UsuarioPesquisaDTO usuario = service.addUsuario(dto);
-        return ResponseEntity.ok(new ApiResponse("Sucesso!", usuario));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse("Sucesso!", usuario));
     }
 
     @DeleteMapping("/usuario/{id}")
@@ -87,7 +88,8 @@ public class UsuarioController {
     public ResponseEntity<ApiResponse> cadastrarEndereco(@RequestBody EnderecoCadastroDTO dto){
         Usuario user = service.getAuthenticatedUsuario();
         EnderecoPesquisaDTO response = service.cadastraEndereco(dto, user);
-        return ResponseEntity.ok(new ApiResponse("Sucesso!", response));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse("Sucesso!", response));
     }
 
     @PutMapping("/me/atualizacao")

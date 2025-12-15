@@ -3,6 +3,7 @@ package com.dailycodework.agroshop.controller.controllers;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,11 +36,13 @@ public class CarrinhoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso", carrinho));
     }
 
-    @DeleteMapping("/me/carrinho/limpar")
-    public void limpar(){
+    @DeleteMapping("/me/carrinho/itens")
+    public ResponseEntity<ApiResponse> limparCarrinho(){
         Usuario usuario = userService.getAuthenticatedUsuario();
         Carrinho carrinho =  usuario.getCarrinho();
         service.limparCarrinho(carrinho.getId());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+            .body(new ApiResponse("Sucesso!", null));
     }
 
     @GetMapping("/me/carrinho/itens")

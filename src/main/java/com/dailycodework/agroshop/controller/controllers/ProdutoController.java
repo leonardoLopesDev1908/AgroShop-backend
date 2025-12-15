@@ -23,6 +23,7 @@ import com.dailycodework.agroshop.controller.mapper.ProdutoMapper;
 import com.dailycodework.agroshop.model.Produto;
 import com.dailycodework.agroshop.response.ApiResponse;
 import com.dailycodework.agroshop.service.Produto.IProdutoService;
+import com.mercadopago.net.HttpStatus;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class ProdutoController {
     private final IProdutoService service;
     private final ProdutoMapper mapper;
 
-    @GetMapping("/pesquisa")
+    @GetMapping
     public ResponseEntity<ApiResponse> getAllProdutos(
                                             @RequestParam(value = "search", required=false) String search,
                                             @RequestParam(value = "categoria", required=false) String categoria,
@@ -53,31 +54,27 @@ public class ProdutoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", produtoPesquisaDTOs));
     }
 
-    @GetMapping("/produto/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getProduto(@PathVariable Long id){
         ProdutoPesquisaDTO dto = mapper.toDTO(service.buscarPorId(id));
         return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
     }
 
-    // @GetMapping("/produto/{nome}")
-    // public ResponseEntity<ApiResponse> getProdutoByNome(@PathVariable String nome){
-    //     List<ProdutoPesquisaDTO> dto = service.getProdutoPorNome(nome);
-    //     return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
-    // }
-
-    @PostMapping("/cadastro")
+    @PostMapping
     public ResponseEntity<ApiResponse> cadastroProduto(@Valid @RequestBody ProdutoCadastroDTO dto){
         ProdutoPesquisaDTO produto = mapper.toDTO(service.addProduto(dto));
-        return ResponseEntity.ok(new ApiResponse("Sucesso!", produto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse("Sucesso!", produto));
     }
 
-    @DeleteMapping("/produto/{id}/excluir")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deletarProduto(@PathVariable Long id){
         service.deletarProdutoPorId(id);
-        return ResponseEntity.ok(new ApiResponse("Deletado!", null));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new ApiResponse("Produto deletado!", null));
     }   
 
-    @PutMapping("/produto/{id}/atualizacao")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> atualizaProduto(@PathVariable Long id, 
                                                        @RequestBody ProdutoUpdateDTO dto){
         ProdutoPesquisaDTO novoProduto = mapper.toDTO(service.atualizarProduto(id, dto));

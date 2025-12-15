@@ -34,19 +34,20 @@ public class ImagemController {
 
     private final IImagemService service;
     
-    @PostMapping("/upload")
+    @PostMapping
     public ResponseEntity<ApiResponse> uploadImagens(@RequestParam("files") List<MultipartFile> files,
                                                     @RequestParam Long produtoId){
         try {
             List<ImagemPesquisaDTO> lista = service.salvarImagens(produtoId, files);
-            return ResponseEntity.ok(new ApiResponse("Upload feito com sucesso!", lista));
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ApiResponse("Upload feito com sucesso!", lista));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ApiResponse("Erro", e.getMessage()));
         }
     }
 
-    @GetMapping("/{id}/download")
+    @GetMapping("/{id}")
     public ResponseEntity<Resource> downloadImagem(@PathVariable Long id) throws SQLException{
         Imagem imagem = service.buscarImagemPorId(id);
         
@@ -59,7 +60,7 @@ public class ImagemController {
             .body(resource);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateImagem(@RequestParam("file") MultipartFile file,
                                                 @RequestParam Long produtoId){
         try {

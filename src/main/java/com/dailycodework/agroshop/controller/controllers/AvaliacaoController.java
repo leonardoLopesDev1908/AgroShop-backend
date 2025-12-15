@@ -18,6 +18,7 @@ import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.response.ApiResponse;
 import com.dailycodework.agroshop.service.Avaliacao.AvaliacaoService;
 import com.dailycodework.agroshop.service.Usuario.UsuarioService;
+import com.mercadopago.net.HttpStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,21 +36,23 @@ public class AvaliacaoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", comentarios));
     } 
 
-    @PostMapping("/{produtoId}/avaliar")
+    @PostMapping("/{produtoId}/avaliacoes")
     public ResponseEntity<ApiResponse> fazerComentario(@RequestBody AvaliacaoCadastroDTO dto,
                                                        @PathVariable Long produtoId){
         AvaliacaoPesquisaDTO comentario = service.addAvaliacao(dto, produtoId);
-        return ResponseEntity.ok(new ApiResponse("Sucesso!", comentario));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(new ApiResponse("Sucesso!", comentario));
     }
 
-    @DeleteMapping("/avaliacao/{avaliacaoId}/excluir")
+    @DeleteMapping("/avaliacoes/{avaliacaoId}")
     public ResponseEntity<ApiResponse> excluirComentario(@PathVariable Long avaliacaoId) throws AuthorizationException{
         Usuario user = userService.getAuthenticatedUsuario();
         service.deleteAvaliacao(user, avaliacaoId);
-        return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                            .body(new ApiResponse("Avaliação deletada",null));
     }
 
-    @GetMapping("/avaliacao/{idProduto}/existe")
+    @GetMapping("/{idProduto}/avaliacoes/me")
     public ResponseEntity<ApiResponse> existeAvaliacao(@PathVariable Long idProduto){
         Usuario user = userService.getAuthenticatedUsuario();
         boolean response = service.verificarAvaliacao(user, idProduto);

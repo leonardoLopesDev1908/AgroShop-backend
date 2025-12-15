@@ -18,9 +18,9 @@ public class CookieUtils{
     public void addCsrfCookie(HttpServletResponse response, String token){
         ResponseCookie cookie = ResponseCookie.from("XSRF-TOKEN", token)
             .httpOnly(false)
-            .secure(useSecureCookie)
+            .secure(false)
             .path("/")
-            .sameSite("Lax")
+            .sameSite("None")
             .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
@@ -42,10 +42,10 @@ public class CookieUtils{
 
         ResponseCookie cookie = ResponseCookie.from(name, token)
             .httpOnly(true)
-            .secure(true)
+            .secure(false)
             .path(path)
             .maxAge(maxAge / 1000)
-            .sameSite("Strict")
+            .sameSite("None")
             .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -78,18 +78,18 @@ public class CookieUtils{
     public void clearTokens(HttpServletResponse response){
         ResponseCookie accessCookie = ResponseCookie.from(ACCESS_TOKEN_COOKIE, "")
             .httpOnly(true)
-            .secure(true)
+            .secure(false)
             .path("/")
             .maxAge(0)
-            .sameSite("Strict")
+            .sameSite("None")
             .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE, "")
             .httpOnly(true)
-            .secure(true)
+            .secure(false)
             .path("/")
             .maxAge(0)
-            .sameSite("Strict")
+            .sameSite("None")
             .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());

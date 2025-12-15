@@ -45,7 +45,7 @@ public class ItemCarrinhoController {
         return ResponseEntity.ok(new ApiResponse("Sucesso!", null));
     }
 
-    @PutMapping("/carrinho/atualizacao")
+    @PutMapping("/me/carrinho")
     public ResponseEntity<ApiResponse> atualizarQuantidade(@RequestBody ItemCarrinhoUpdateDTO dto){
         Usuario user = usuarioService.getAuthenticatedUsuario();
         Carrinho carrinho = carrinhoService.buscarPorIdUsuario(user);
