@@ -8,6 +8,7 @@ import com.dailycodework.agroshop.controller.dto.cadastro.UsuarioCadastroDTO;
 import com.dailycodework.agroshop.controller.dto.pesquisa.EnderecoPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.pesquisa.UsuarioPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.update.UsuarioUpdateDTO;
+import com.dailycodework.agroshop.model.Endereco;
 import com.dailycodework.agroshop.model.Usuario;
 
 public interface IUsuarioService {
@@ -17,6 +18,7 @@ public interface IUsuarioService {
     UsuarioPesquisaDTO atualizarSenha(Usuario usuario, String email, String senhaAtual, String senhaNova);
     Usuario getAuthenticatedUsuario();
     List<EnderecoPesquisaDTO> getEnderecos(Usuario usuario);
+    Endereco getEnderecoById(Usuario usuario, UUID id);
     UsuarioPesquisaDTO buscarPorId(UUID id);
     List<UsuarioPesquisaDTO> buscarPorNome(String nome);
     UsuarioPesquisaDTO buscarPorEmailDTO(String email);

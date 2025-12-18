@@ -26,9 +26,9 @@ import com.dailycodework.agroshop.repository.CategoriaRepository;
 import com.dailycodework.agroshop.repository.ItemCarrinhoRepository;
 import com.dailycodework.agroshop.repository.ItemPedidoRepository;
 import com.dailycodework.agroshop.repository.ProdutoRepository;
-import static com.dailycodework.agroshop.repository.ProdutosSpecs.categoriaEqual;
-import static com.dailycodework.agroshop.repository.ProdutosSpecs.precoBetween;
-import static com.dailycodework.agroshop.repository.ProdutosSpecs.searchLike;
+import static com.dailycodework.agroshop.repository.specs.ProdutosSpecs.categoriaEqual;
+import static com.dailycodework.agroshop.repository.specs.ProdutosSpecs.precoBetween;
+import static com.dailycodework.agroshop.repository.specs.ProdutosSpecs.searchLike;
 import com.dailycodework.agroshop.service.Categoria.CategoriaService;
 
 import jakarta.persistence.EntityNotFoundException;

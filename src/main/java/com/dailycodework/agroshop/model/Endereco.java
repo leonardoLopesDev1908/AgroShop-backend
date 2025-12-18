@@ -2,6 +2,8 @@ package com.dailycodework.agroshop.model;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.NaturalId;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -27,10 +29,16 @@ public class Endereco {
     private UUID id;
 
     private String endereco;
+    
+    @NaturalId
     private String numero;
+
+    @NaturalId
     private String complemento;
     private String cidade;
     private String estado;
+
+    @NaturalId
     private String cep;
 
     @ManyToOne

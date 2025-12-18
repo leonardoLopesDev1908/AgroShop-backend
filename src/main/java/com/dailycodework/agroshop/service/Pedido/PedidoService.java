@@ -12,17 +12,22 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.dailycodework.agroshop.controller.dto.pesquisa.EnderecoPesquisaDTO;
+import com.dailycodework.agroshop.controller.dto.pesquisa.PedidoCompletoDTO;
 import com.dailycodework.agroshop.controller.dto.pesquisa.PedidoPesquisaDTO;
+import com.dailycodework.agroshop.controller.mapper.EnderecoMapper;
 import com.dailycodework.agroshop.controller.mapper.PedidoMapper;
 import com.dailycodework.agroshop.model.Carrinho;
+import com.dailycodework.agroshop.model.Endereco;
 import com.dailycodework.agroshop.model.ItemPedido;
 import com.dailycodework.agroshop.model.Pedido;
 import com.dailycodework.agroshop.model.Produto;
 import com.dailycodework.agroshop.model.Usuario;
 import com.dailycodework.agroshop.model.enums.PedidoStatus;
+import com.dailycodework.agroshop.repository.EnderecoRepository;
 import com.dailycodework.agroshop.repository.PedidoRepository;
-import com.dailycodework.agroshop.repository.PedidoSpecs;
 import com.dailycodework.agroshop.repository.ProdutoRepository;
+import com.dailycodework.agroshop.repository.specs.PedidoSpecs;
 import com.dailycodework.agroshop.service.Carrinho.ICarrinhoService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -35,18 +40,44 @@ public class PedidoService implements IPedidoService{
 
     private final PedidoRepository repository;
     private final ProdutoRepository produtoRepository;
+    private final EnderecoRepository enderecoRepository;
+
     private final PedidoValidator validator;
     private final ICarrinhoService carrinhoService;
+    
     private final PedidoMapper mapper;
+    private final EnderecoMapper enderecoMapper;
     private final PedidoSpecs specsPedido;
 
     @Override
     @Transactional
-    public PedidoPesquisaDTO fazerPedido(Usuario usuario, BigDecimal frete) {
+    public PedidoPesquisaDTO fazerPedido(Usuario usuario, BigDecimal frete, EnderecoPesquisaDTO enderecoDTO) {
         Carrinho carrinho = carrinhoService.buscarPorIdUsuario(usuario);
         Pedido pedido = criarPedido(carrinho);
         List<ItemPedido> itens = criarItens(pedido, carrinho);
-        //validator.validar(itens);
+
+        Endereco endereco; 
+        
+        if(enderecoDTO.complemento() != null && !enderecoDTO.complemento().trim().isEmpty()){
+            endereco = enderecoRepository.findByCepAndNumeroAndComplemento(
+                    enderecoDTO.cep(), 
+                    enderecoDTO.numero(), 
+                    enderecoDTO.complemento()).orElseThrow(() -> {
+                    throw new EntityNotFoundException("Endereço não encontrado para a combinação: " +
+                        enderecoDTO.cep()+", "+ enderecoDTO.numero()+", "+enderecoDTO.complemento()
+                    );
+                });
+        } else {
+            endereco = enderecoRepository.findByCepAndNumero(
+                    enderecoDTO.cep(), 
+                    enderecoDTO.numero()).orElseThrow(() -> {
+                    throw new EntityNotFoundException("Endereço não encontrado para a combinação: " +
+                        enderecoDTO.cep()+", "+ enderecoDTO.numero()
+                    );
+                });
+        }
+
+        pedido.setEnderecoId(endereco.getId());
         pedido.setItens(new HashSet<>(itens));
         pedido.setValorTotal(calcularValorTotal(itens).add(frete));
         pedido.setFrete(frete);
@@ -89,11 +120,27 @@ public class PedidoService implements IPedidoService{
     }
 
     @Override
-    public PedidoPesquisaDTO buscaPedidoPorId(Long id){
+    public Pedido buscaPedidoPorId(Long id){
         Pedido pedido = repository.findById(id).orElseThrow(() -> {
             throw new EntityNotFoundException("Pedido não encontrado");
         });
-        return mapper.toDTO(pedido);
+        return pedido;
+    }
+
+    @Override
+    public PedidoCompletoDTO getPedidoCompleto(Long id){
+        Pedido pedido = repository.findById(id).orElseThrow(() -> {
+            throw new EntityNotFoundException("Pedido não encontrado");
+        });
+
+        Endereco endereco = enderecoRepository.findById(pedido.getEnderecoId()).orElseThrow(() -> {
+            throw new EntityNotFoundException("Endereço não encontrado");
+        });
+
+        return new PedidoCompletoDTO(
+                mapper.toDTO(pedido),
+                enderecoMapper.toDTO(endereco)
+        );
     }
 
     @Override
