@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.FreteDTO;
+import com.dailycodework.agroshop.controller.dto.cadastro.NovoPedidoRequest;
+import com.dailycodework.agroshop.controller.dto.pesquisa.PedidoCompletoDTO;
 import com.dailycodework.agroshop.controller.dto.pesquisa.PedidoPesquisaDTO;
 import com.dailycodework.agroshop.controller.dto.update.StatusRequest;
 import com.dailycodework.agroshop.controller.mapper.PedidoMapper;
@@ -40,9 +41,11 @@ public class PedidoController {
     private final PedidoMapper mapper;
 
     @PostMapping("/me/pedido")
-    public ResponseEntity<ApiResponse> fazerNovoPedido(@RequestBody FreteDTO frete){
+    public ResponseEntity<ApiResponse> fazerNovoPedido(@RequestBody NovoPedidoRequest pedido){
         Usuario usuario = userService.getAuthenticatedUsuario();
-        PedidoPesquisaDTO dto = service.fazerPedido(usuario, BigDecimal.valueOf((Double.valueOf(frete.getPrice()))));
+        PedidoPesquisaDTO dto = service.fazerPedido(usuario, 
+                                    BigDecimal.valueOf((Double.valueOf(pedido.frete().getPrice()))),
+                                    pedido.endereco());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse("Sucesso", dto));
     }
@@ -72,7 +75,13 @@ public class PedidoController {
 
     @GetMapping("/me/pedido/{id}")
     public ResponseEntity<ApiResponse> buscarPedidosId(@PathVariable Long id){
-        PedidoPesquisaDTO pedido = service.buscaPedidoPorId(id);
+        PedidoPesquisaDTO pedido = mapper.toDTO(service.buscaPedidoPorId(id));
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", pedido));
+    }
+
+    @GetMapping("/me/pedido-completo/{id}")
+    public ResponseEntity<ApiResponse> buscarPedidoCompleto(@PathVariable Long id){
+        PedidoCompletoDTO pedido = service.getPedidoCompleto(id);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", pedido));
     }
 

@@ -1,4 +1,4 @@
-package com.dailycodework.agroshop.repository;
+package com.dailycodework.agroshop.repository.specs;
 
 import java.math.BigDecimal;
 

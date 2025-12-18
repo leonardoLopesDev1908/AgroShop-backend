@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import com.dailycodework.agroshop.controller.dto.cadastro.PedidoCadastroDTO;
+import com.dailycodework.agroshop.controller.dto.payments.CreatePreferenceRequestDTO;
 import com.dailycodework.agroshop.controller.dto.pesquisa.PedidoPesquisaDTO;
 import com.dailycodework.agroshop.model.Pedido;
 

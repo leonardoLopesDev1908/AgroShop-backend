@@ -103,6 +103,20 @@ public class UsuarioService implements IUsuarioService {
                         .collect(Collectors.toList());
     }
 
+    @Override 
+    public Endereco getEnderecoById(Usuario usuario, UUID id){
+        System.out.println("getEnderecoById");
+        List<Endereco> enderecos = enderecoRepository.getEnderecoByUsuario(usuario);
+        for(Endereco endereco : enderecos){
+            System.out.println(endereco.getId()+" " + id);
+            if(endereco.getId().equals(id)){
+                System.out.println("Returning: " + endereco);
+                return endereco;
+            }
+        }
+        return null;
+    }
+
     @Override
     public UsuarioPesquisaDTO buscarPorId(UUID id){
         Usuario user =  repository.findById(id).orElseThrow(()->{

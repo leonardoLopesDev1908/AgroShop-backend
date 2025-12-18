@@ -12,5 +12,6 @@ public record PedidoPesquisaDTO(
                     Set<ItemPedidoPesquisaDTO> itens,
                     PedidoStatus status,
                     UsuarioPesquisaDTO usuario,
-                    BigDecimal frete
+                    BigDecimal frete,
+                    EnderecoPesquisaDTO endereco
 ) {}

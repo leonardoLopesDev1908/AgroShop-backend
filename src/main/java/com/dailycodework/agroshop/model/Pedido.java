@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import com.dailycodework.agroshop.model.enums.PedidoStatus;
 
@@ -48,6 +49,9 @@ public class Pedido {
     @Column
     @Enumerated(EnumType.STRING)
     private PedidoStatus status;
+
+    @Column
+    private UUID enderecoId;
 
     @ManyToOne 
     @JoinColumn(name = "usuario_id")    
