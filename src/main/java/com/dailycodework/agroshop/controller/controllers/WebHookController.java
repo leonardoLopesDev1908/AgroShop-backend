@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dailycodework.agroshop.controller.dto.payments.MercadoPagoConfigDTO;
 import com.dailycodework.agroshop.response.ApiResponse;
-import com.dailycodework.agroshop.service.Pagamento.PaymentNotificationService;
+import com.dailycodework.agroshop.service.Payment.PaymentNotificationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

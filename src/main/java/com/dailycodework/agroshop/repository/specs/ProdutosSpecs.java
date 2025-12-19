@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.dailycodework.agroshop.model.Categoria;
-import com.dailycodework.agroshop.model.Produto;
+import com.dailycodework.agroshop.model.Category;
+import com.dailycodework.agroshop.model.Product;
 
 import jakarta.persistence.criteria.Path;
 
 public class ProdutosSpecs {
 
-    public static Specification<Produto> searchLike(String search){
+    public static Specification<Product> searchLike(String search){
         return (root, query, cb) -> {
             if(search == null || search.trim().isEmpty()){
                 return cb.conjunction();
@@ -24,7 +24,7 @@ public class ProdutosSpecs {
         };
     }
 
-    public static Specification<Produto> categoriaEqual(Categoria categoria){
+    public static Specification<Product> categoriaEqual(Category categoria){
         return (root, query, cb) -> {
             if(categoria == null){
                 return cb.conjunction();
@@ -34,7 +34,7 @@ public class ProdutosSpecs {
         };
     }
 
-    public static Specification<Produto> precoBetween(BigDecimal precoMin, BigDecimal precoMax){
+    public static Specification<Product> precoBetween(BigDecimal precoMin, BigDecimal precoMax){
         return (root, query, cb) -> {
             if(precoMax == null && precoMin == null){
                 return cb.conjunction();

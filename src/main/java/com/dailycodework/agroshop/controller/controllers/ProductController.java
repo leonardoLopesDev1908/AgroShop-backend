@@ -1,0 +1,104 @@
+package com.dailycodework.agroshop.controller.controllers;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dailycodework.agroshop.controller.dto.pesquisa.ProductSearchDTO;
+import com.dailycodework.agroshop.controller.dto.register.ProductRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.update.ProductUpdateDTO;
+import com.dailycodework.agroshop.controller.mapper.ProductMapper;
+import com.dailycodework.agroshop.model.Product;
+import com.dailycodework.agroshop.response.ApiResponse;
+import com.dailycodework.agroshop.service.Product.IProductService;
+import com.mercadopago.net.HttpStatus;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("${api.prefix}/produtos")
+@RequiredArgsConstructor
+public class ProductController {
+
+    private final IProductService service;
+    private final ProductMapper mapper;
+
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllProdutos(
+                                            @RequestParam(value = "search", required=false) String search,
+                                            @RequestParam(value = "categoria", required=false) String categoria,
+                                            @RequestParam(value = "precoMin", required=false) BigDecimal precoMin,
+                                            @RequestParam(value = "precoMax", required=false) BigDecimal precoMax,
+                                            @RequestParam(value = "pagina", defaultValue="0") Integer pagina,
+                                            @RequestParam(value = "tamanhoPagina", defaultValue="20") Integer tamanhoPagina){
+        
+        Page<Product> produtos = service.getProdutos(search, categoria, precoMin, precoMax, pagina, tamanhoPagina);                                            
+
+        List<ProductSearchDTO> produtoPesquisaDTOs = produtos.getContent().stream()  
+                        .map(mapper::toDTO)
+                        .collect(Collectors.toList()); 
+                                            
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", produtoPesquisaDTOs));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getProduto(@PathVariable Long id){
+        ProductSearchDTO dto = mapper.toDTO(service.buscarPorId(id));
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", dto));
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponse> cadastroProduto(@Valid @RequestBody ProductRegisterDTO dto){
+        ProductSearchDTO produto = mapper.toDTO(service.addProduto(dto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse("Sucesso!", produto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deletarProduto(@PathVariable Long id){
+        service.deletarProdutoPorId(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new ApiResponse("Produto deletado!", null));
+    }   
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> atualizaProduto(@PathVariable Long id, 
+                                                       @RequestBody ProductUpdateDTO dto){
+        ProductSearchDTO novoProduto = mapper.toDTO(service.atualizarProduto(id, dto));
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", novoProduto));
+    }
+
+    @GetMapping("/distintos")
+    public ResponseEntity<ApiResponse> getDistintosPorNome(){
+        List<ProductSearchDTO> produtos = service.findDistinctProdutodsByNome().stream()
+                                                .map(mapper::toDTO)
+                                                .collect(Collectors.toList());
+        return ResponseEntity.ok(new ApiResponse("Sucesso", produtos));
+    }
+
+    @GetMapping("/produto/categoria")
+    public ResponseEntity<ApiResponse> getCategoria(@RequestParam String categoria){
+        List<ProductSearchDTO> produtos = service.getProdutoPorCategoria(categoria);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", produtos));
+    }
+
+    @GetMapping("/outros")
+    public ResponseEntity<ApiResponse> getOutros(@RequestParam String categoria){
+        List<ProductSearchDTO> produtos = service.findOutrosProdutos(categoria);
+        return ResponseEntity.ok(new ApiResponse("Sucesso!", produtos));
+    }
+}
+

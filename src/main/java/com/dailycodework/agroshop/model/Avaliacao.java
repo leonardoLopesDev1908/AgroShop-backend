@@ -41,10 +41,10 @@ public class Avaliacao {
     @ManyToOne
     @JoinColumn(name="usuario_id")
     @JsonIgnore
-    private Usuario usuario;
+    private User usuario;
 
     @ManyToOne
     @JoinColumn(name="produto_id")
     @JsonIgnore
-    private Produto produto;
+    private Product produto;
 }

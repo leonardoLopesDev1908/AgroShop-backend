@@ -6,14 +6,14 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.dailycodework.agroshop.model.Endereco;
-import com.dailycodework.agroshop.model.Usuario;
+import com.dailycodework.agroshop.model.Address;
+import com.dailycodework.agroshop.model.User;
 
-public interface EnderecoRepository extends JpaRepository<Endereco, UUID> {
+public interface EnderecoRepository extends JpaRepository<Address, UUID> {
     
-    List<Endereco> getEnderecoByUsuario(Usuario usuario);
-    Optional<Endereco> findByCepAndNumeroAndComplemento(String cep, 
+    List<Address> getEnderecoByUsuario(User usuario);
+    Optional<Address> findByCepAndNumeroAndComplemento(String cep, 
                                                         String numero, 
                                                         String complemento);
-    Optional<Endereco> findByCepAndNumero(String cep, String numero);
+    Optional<Address> findByCepAndNumero(String cep, String numero);
 }

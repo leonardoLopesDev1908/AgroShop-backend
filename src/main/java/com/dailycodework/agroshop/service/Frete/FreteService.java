@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.dailycodework.agroshop.controller.dto.pesquisa.FreteDTO;
-import com.dailycodework.agroshop.model.Carrinho;
-import com.dailycodework.agroshop.model.ItemCarrinho;
-import com.dailycodework.agroshop.model.Produto;
-import com.dailycodework.agroshop.model.Usuario;
-import com.dailycodework.agroshop.service.Produto.ProdutoService;
-import com.dailycodework.agroshop.service.Usuario.UsuarioService;
+import com.dailycodework.agroshop.model.Cart;
+import com.dailycodework.agroshop.model.CartItem;
+import com.dailycodework.agroshop.model.Product;
+import com.dailycodework.agroshop.model.User;
+import com.dailycodework.agroshop.service.Product.ProductService;
+import com.dailycodework.agroshop.service.User.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -39,8 +39,8 @@ public class FreteService implements IFreteService{
     @Value("${melhorenvio.token}")
     private String token;
 
-    private final ProdutoService serviceProduto;
-    private final UsuarioService serviceUsuario;
+    private final ProductService serviceProduto;
+    private final UserService serviceUsuario;
     private final ObjectMapper objectMapper;
 
     private HttpClient httpClient; 
@@ -54,7 +54,7 @@ public class FreteService implements IFreteService{
 
     @Override
     public List<FreteDTO> freteProduto(Long idProduto, String cepDestino) throws IOException, InterruptedException{
-        Produto produto = serviceProduto.buscarPorId(idProduto);
+        Product produto = serviceProduto.buscarPorId(idProduto);
 
         var request = HttpRequest.newBuilder()
         .uri(URI.create("https://www.melhorenvio.com.br/api/v2/me/shipment/calculate"))
@@ -103,8 +103,8 @@ public class FreteService implements IFreteService{
 
     @Override
     public List<FreteDTO> freteItensCarrinho(String cepDestino) {
-        Usuario user = serviceUsuario.getAuthenticatedUsuario();
-        Carrinho carrinho = user.getCarrinho();
+        User user = serviceUsuario.getAuthenticatedUsuario();
+        Cart carrinho = user.getCarrinho();
         
         try{
             String requestBody = criarRequestBody(cepDestino, carrinho);
@@ -129,7 +129,7 @@ public class FreteService implements IFreteService{
         return null;
     }
 
-    private String criarRequestBody(String cepDestino, Carrinho carrinho) throws IOException{
+    private String criarRequestBody(String cepDestino, Cart carrinho) throws IOException{
         ObjectNode requestBody = objectMapper.createObjectNode();
 
         ObjectNode fromNode = requestBody.putObject("from");
@@ -140,9 +140,9 @@ public class FreteService implements IFreteService{
 
         ArrayNode productsArray = requestBody.putArray("products");
         
-        for(ItemCarrinho item : carrinho.getItems()){
+        for(CartItem item : carrinho.getItems()){
             ObjectNode productNode = objectMapper.createObjectNode();
-            Produto produto = item.getProduto();
+            Product produto = item.getProduto();
 
             productNode.put("id", produto.getId());
             productNode.put("weight", produto.getPeso());

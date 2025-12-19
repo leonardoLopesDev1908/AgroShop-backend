@@ -8,20 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.dailycodework.agroshop.model.Categoria;
-import com.dailycodework.agroshop.model.Produto;
+import com.dailycodework.agroshop.model.Category;
+import com.dailycodework.agroshop.model.Product;
 
 @Repository
-public interface ProdutoRepository extends JpaRepository<Produto, Long>, JpaSpecificationExecutor<Produto>{
+public interface ProdutoRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>{
     
-    List<Produto> findByNomeContaining(String nome); 
-    List<Produto> findByMarcaContaining(String marca);
-    List<Produto> findByCategoria(Categoria categoria);
+    List<Product> findByNomeContaining(String nome); 
+    List<Product> findByMarcaContaining(String marca);
+    List<Product> findByCategoria(Category categoria);
     
     @Query("SELECT p FROM Produto p WHERE p.categoria <> :categoria OR p.categoria IS NULL")
-    List<Produto> findTop10ByCategoriaNotOrCategoriaIsNull(@Param("categoria") Categoria categoria);
+    List<Product> findTop10ByCategoriaNotOrCategoriaIsNull(@Param("categoria") Category categoria);
 
-    List<Produto> findByMarcaAndNome(String marca, String nome);
+    List<Product> findByMarcaAndNome(String marca, String nome);
     boolean existsByNomeAndMarca(String nome, String marca);
     boolean existsByNomeAndMarcaAndIdNot(String nome, String marca, Long id);
     Integer findEstoqueById(Long id);
