@@ -7,14 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.dailycodework.agroshop.model.Usuario;
+import com.dailycodework.agroshop.model.User;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
+public interface UsuarioRepository extends JpaRepository<User, UUID> {
 
     boolean existsByEmail(String email);
-    List<Usuario> findByNome(String nome);
-    Usuario findByEmail(String email);
+    List<User> findByNome(String nome);
+    User findByEmail(String email);
 
     @Query("""
             SELECT COUNT(c) FROM Usuario c

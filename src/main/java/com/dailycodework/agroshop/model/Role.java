@@ -25,7 +25,7 @@ public class Role {
     private String nome;
 
     @ManyToMany(mappedBy = "roles")
-    private Collection<Usuario> usuarios = new HashSet<>();
+    private Collection<User> usuarios = new HashSet<>();
 
     public Role(String nome){
         this.nome = nome;

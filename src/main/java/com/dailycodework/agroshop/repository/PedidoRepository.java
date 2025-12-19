@@ -11,11 +11,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.dailycodework.agroshop.model.Pedido;
+import com.dailycodework.agroshop.model.Order;
 
 @Repository
-public interface PedidoRepository extends JpaRepository<Pedido, Long>, JpaSpecificationExecutor<Pedido>{
-    List<Pedido> findByUsuarioId(UUID id);
+public interface PedidoRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order>{
+    List<Order> findByUsuarioId(UUID id);
     
     @Query("""
         SELECT SUM(p.valorTotal) FROM Pedido p 

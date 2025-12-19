@@ -9,8 +9,8 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import com.dailycodework.agroshop.model.Pedido;
-import com.dailycodework.agroshop.model.Usuario;
+import com.dailycodework.agroshop.model.Order;
+import com.dailycodework.agroshop.model.User;
 
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PedidoSpecs {
 
-    public Specification<Pedido> idEqual(Long id){
+    public Specification<Order> idEqual(Long id){
         return(root, query, cb) -> {
             if(id == null){
                 return cb.conjunction();
@@ -30,18 +30,18 @@ public class PedidoSpecs {
         };
     }
 
-    public Specification<Pedido> emailEqual(String email){
+    public Specification<Order> emailEqual(String email){
         return (root, query, cb) -> {
             if(email == null || email.trim().isEmpty()){
                 return cb.conjunction();
             }
-            Join<Pedido, Usuario> usuarioJoin = root.join("usuario", JoinType.INNER);
+            Join<Order, User> usuarioJoin = root.join("usuario", JoinType.INNER);
             
             return cb.equal(usuarioJoin.get("email"), email);
         };
     }
 
-    public Specification<Pedido> isDataBetween(LocalDate dataInicio, LocalDate dataFim){
+    public Specification<Order> isDataBetween(LocalDate dataInicio, LocalDate dataFim){
         return (root, query, cb) -> {
             if(dataInicio == null && dataFim == null){
                 return cb.conjunction();

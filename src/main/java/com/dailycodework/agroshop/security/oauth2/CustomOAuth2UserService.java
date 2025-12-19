@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import com.dailycodework.agroshop.model.Usuario;
+import com.dailycodework.agroshop.model.User;
 import com.dailycodework.agroshop.repository.UsuarioRepository;
 import com.dailycodework.agroshop.security.user.ShopUserDetails;
 
@@ -26,9 +26,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
         String email = oauth2User.getAttribute("email");
         String name = oauth2User.getAttribute("name");
 
-        Usuario usuario = Optional.ofNullable(userRepository.findByEmail(email))
+        User usuario = Optional.ofNullable(userRepository.findByEmail(email))
                             .orElseGet(() -> {
-                                Usuario novoUsuario = new Usuario();
+                                User novoUsuario = new User();
                                 novoUsuario.setEmail(email);
                                 novoUsuario.setNome(name);
                                 return userRepository.save(novoUsuario);

@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dailycodework.agroshop.controller.dto.cadastro.AvaliacaoCadastroDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.AvaliacaoPesquisaDTO;
-import com.dailycodework.agroshop.model.Usuario;
+import com.dailycodework.agroshop.controller.dto.pesquisa.AvaliationSearchDTO;
+import com.dailycodework.agroshop.controller.dto.register.AvaliationRegisterDTO;
+import com.dailycodework.agroshop.model.User;
 import com.dailycodework.agroshop.response.ApiResponse;
-import com.dailycodework.agroshop.service.Avaliacao.AvaliacaoService;
-import com.dailycodework.agroshop.service.Usuario.UsuarioService;
+import com.dailycodework.agroshop.service.Avaliation.AvaliationService;
+import com.dailycodework.agroshop.service.User.UserService;
 import com.mercadopago.net.HttpStatus;
 
 import lombok.RequiredArgsConstructor;
@@ -27,26 +27,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AvaliacaoController {
     
-    private final AvaliacaoService service;
-    private final UsuarioService userService;
+    private final AvaliationService service;
+    private final UserService userService;
 
     @GetMapping("/{produtoId}/avaliacoes")
     public ResponseEntity<ApiResponse> getComentarios(@PathVariable Long produtoId){
-        List<AvaliacaoPesquisaDTO> comentarios = service.findAvaliacoes(produtoId);
+        List<AvaliationSearchDTO> comentarios = service.findAvaliacoes(produtoId);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", comentarios));
     } 
 
     @PostMapping("/{produtoId}/avaliacoes")
-    public ResponseEntity<ApiResponse> fazerComentario(@RequestBody AvaliacaoCadastroDTO dto,
+    public ResponseEntity<ApiResponse> fazerComentario(@RequestBody AvaliationRegisterDTO dto,
                                                        @PathVariable Long produtoId){
-        AvaliacaoPesquisaDTO comentario = service.addAvaliacao(dto, produtoId);
+        AvaliationSearchDTO comentario = service.addAvaliacao(dto, produtoId);
         return ResponseEntity.status(HttpStatus.CREATED)
                         .body(new ApiResponse("Sucesso!", comentario));
     }
 
     @DeleteMapping("/avaliacoes/{avaliacaoId}")
     public ResponseEntity<ApiResponse> excluirComentario(@PathVariable Long avaliacaoId) throws AuthorizationException{
-        Usuario user = userService.getAuthenticatedUsuario();
+        User user = userService.getAuthenticatedUsuario();
         service.deleteAvaliacao(user, avaliacaoId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                             .body(new ApiResponse("Avaliação deletada",null));
@@ -54,7 +54,7 @@ public class AvaliacaoController {
 
     @GetMapping("/{idProduto}/avaliacoes/me")
     public ResponseEntity<ApiResponse> existeAvaliacao(@PathVariable Long idProduto){
-        Usuario user = userService.getAuthenticatedUsuario();
+        User user = userService.getAuthenticatedUsuario();
         boolean response = service.verificarAvaliacao(user, idProduto);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", response));
     }

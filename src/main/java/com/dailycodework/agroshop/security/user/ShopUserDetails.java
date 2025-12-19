@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.dailycodework.agroshop.model.Usuario;
+import com.dailycodework.agroshop.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +32,7 @@ public class ShopUserDetails implements UserDetails{
 
     private Collection<GrantedAuthority> authorities;
 
-    public static ShopUserDetails buildUserDetails(Usuario usuario){
+    public static ShopUserDetails buildUserDetails(User usuario){
         List<GrantedAuthority> authorities = usuario.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getNome()))
                 .collect(Collectors.toList());

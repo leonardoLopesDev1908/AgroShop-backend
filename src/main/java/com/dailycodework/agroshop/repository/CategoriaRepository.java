@@ -3,12 +3,12 @@ package com.dailycodework.agroshop.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.dailycodework.agroshop.model.Categoria;
+import com.dailycodework.agroshop.model.Category;
 
 @Repository
-public interface CategoriaRepository extends JpaRepository<Categoria, Long>{
+public interface CategoriaRepository extends JpaRepository<Category, Long>{
 
-    Categoria findByNome(String nome);
+    Category findByNome(String nome);
     boolean existsByNome(String nome);
     boolean existsByNomeAndIdNot(String nome, Long id);
 
