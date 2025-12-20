@@ -6,11 +6,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.maven.wagon.authorization.AuthorizationException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.AvaliationSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.AvaliationRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.AvaliationSearchDTO;
 import com.dailycodework.agroshop.controller.mapper.AvaliationMapper;
 import com.dailycodework.agroshop.model.Avaliacao;
 import com.dailycodework.agroshop.model.Product;
@@ -34,7 +33,7 @@ public class AvaliationService implements IAvaliationService{
     @Override
     public List<AvaliationSearchDTO> findAvaliacoes(Long idProduto) {
         Product produto = produtoService.buscarPorId(idProduto);
-        return (repository.findAllByProduto(produto)).stream()  
+        return (repository.findAllByProduct(produto)).stream()  
                         .map(mapper::toDTO)
                         .collect(Collectors.toList());
     }
@@ -51,8 +50,8 @@ public class AvaliationService implements IAvaliationService{
         user.getAvaliacoes().add(avaliacao);
 
         avaliacao.setData(LocalDateTime.now());
-        avaliacao.setProduto(produto);
-        avaliacao.setUsuario(user);
+        avaliacao.setProduct(produto);
+        avaliacao.setUser(user);
 
         return mapper.toDTO(repository.save(avaliacao));
     }
@@ -63,7 +62,7 @@ public class AvaliationService implements IAvaliationService{
             throw new EntityNotFoundException("Avaliação não encontrada para esse id: " + id);
         });
 
-        if(avaliacao.getUsuario().getId().equals(user.getId())){
+        if(avaliacao.getUser().getId().equals(user.getId())){
             repository.delete(avaliacao);
         } else {
             throw new AuthorizationException("Você não tem permissão para realizar essa ação");
@@ -73,7 +72,7 @@ public class AvaliationService implements IAvaliationService{
     @Override
     public boolean verificarAvaliacao(User user, Long idProduto){
         Product produto = produtoService.buscarPorId(idProduto);
-        boolean existe = repository.existsByUsuarioAndProduto(user, produto);
+        boolean existe = repository.existsByUserAndProduct(user, produto);
         return existe;
     }
     

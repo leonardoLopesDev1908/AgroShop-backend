@@ -18,13 +18,13 @@ public class OrderAvaliator {
     
     public void validar(List<OrderItem> itens){
         for(OrderItem item : itens){
-            Product produto = item.getProduto();
+            Product produto = item.getProduct();
             Integer estoque = produtoService.getEstoque(produto.getId());
             System.out.println("Produto: " + produto.getNome() + " -> " + estoque);
             System.out.println("Quantidade: " + item.getQuantidade());
-            // if(item.getQuantidade() > estoque){
-            //     throw new IllegalArgumentException("Estoque insuficiente para esse pedido");
-            // }
+            if(item.getQuantidade() > estoque){
+                throw new IllegalArgumentException("Estoque insuficiente para esse pedido");
+            }
         }
     }
 

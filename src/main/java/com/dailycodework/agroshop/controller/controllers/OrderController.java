@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.CompleteOrderDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.OrderSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.NewOrderRequest;
+import com.dailycodework.agroshop.controller.dto.search.CompleteOrderDTO;
+import com.dailycodework.agroshop.controller.dto.search.OrderSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.StatusRequest;
 import com.dailycodework.agroshop.controller.mapper.OrderMapper;
 import com.dailycodework.agroshop.model.Order;
@@ -82,6 +82,7 @@ public class OrderController {
     @GetMapping("/me/pedido-completo/{id}")
     public ResponseEntity<ApiResponse> buscarPedidoCompleto(@PathVariable Long id){
         CompleteOrderDTO pedido = service.getPedidoCompleto(id);
+        System.out.println(pedido.pedido().itens());
         return ResponseEntity.ok(new ApiResponse("Sucesso!", pedido));
     }
 

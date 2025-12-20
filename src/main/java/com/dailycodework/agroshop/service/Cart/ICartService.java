@@ -3,7 +3,7 @@ package com.dailycodework.agroshop.service.Cart;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.CartItemSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.CartItemSearchDTO;
 import com.dailycodework.agroshop.model.Cart;
 import com.dailycodework.agroshop.model.User;
 

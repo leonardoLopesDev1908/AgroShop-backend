@@ -14,11 +14,11 @@ import org.springframework.stereotype.Repository;
 import com.dailycodework.agroshop.model.Order;
 
 @Repository
-public interface PedidoRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order>{
-    List<Order> findByUsuarioId(UUID id);
+public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order>{
+    List<Order> findByUserId(UUID id);
     
     @Query("""
-        SELECT SUM(p.valorTotal) FROM Pedido p 
+        SELECT SUM(p.valorTotal) FROM Order p 
         WHERE p.data BETWEEN :inicio AND :fim
     """)
     BigDecimal totalVendas(@Param("inicio") LocalDateTime inicio, 
@@ -26,7 +26,7 @@ public interface PedidoRepository extends JpaRepository<Order, Long>, JpaSpecifi
 
     @Query("""
             SELECT YEAR(p.data), MONTH(p.data), SUM(p.valorTotal) 
-            FROM Pedido p 
+            FROM Order p 
             WHERE YEAR(p.data) = :ano
             GROUP BY YEAR(p.data), MONTH(p.data)
             ORDER BY YEAR(p.data), MONTH(p.data)    
@@ -35,13 +35,13 @@ public interface PedidoRepository extends JpaRepository<Order, Long>, JpaSpecifi
 
                                       
      @Query(""" 
-             SELECT it.produto.nome, SUM(it.quantidade) FROM Pedido p 
-             JOIN ItemPedido it 
-             ON it.pedido.id = p.id 
-             JOIN Produto pr 
-             ON it.produto.id = pr.id 
+             SELECT it.product.nome, SUM(it.quantidade) FROM Order p 
+             JOIN OrderItem it 
+             ON it.order.id = p.id 
+             JOIN Product pr 
+             ON it.product.id = pr.id 
              WHERE p.data BETWEEN :inicio AND :fim 
-             GROUP BY it.produto.nome 
+             GROUP BY it.product.nome 
              ORDER BY SUM(it.quantidade) 
      """) 
      List<Object[]> produtosMaisVendidos(@Param("inicio") LocalDateTime inicio, @Param("fim") LocalDateTime fim);

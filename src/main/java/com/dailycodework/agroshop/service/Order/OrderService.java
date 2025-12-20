@@ -12,21 +12,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.AddressSearchDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.CompleteOrderDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.OrderSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.AddressSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.CompleteOrderDTO;
+import com.dailycodework.agroshop.controller.dto.search.OrderSearchDTO;
 import com.dailycodework.agroshop.controller.mapper.AddressMapper;
 import com.dailycodework.agroshop.controller.mapper.OrderMapper;
-import com.dailycodework.agroshop.model.Cart;
 import com.dailycodework.agroshop.model.Address;
-import com.dailycodework.agroshop.model.OrderItem;
+import com.dailycodework.agroshop.model.Cart;
 import com.dailycodework.agroshop.model.Order;
+import com.dailycodework.agroshop.model.OrderItem;
 import com.dailycodework.agroshop.model.Product;
 import com.dailycodework.agroshop.model.User;
 import com.dailycodework.agroshop.model.enums.PedidoStatus;
-import com.dailycodework.agroshop.repository.EnderecoRepository;
-import com.dailycodework.agroshop.repository.PedidoRepository;
-import com.dailycodework.agroshop.repository.ProdutoRepository;
+import com.dailycodework.agroshop.repository.AddressRepository;
+import com.dailycodework.agroshop.repository.OrderRepository;
+import com.dailycodework.agroshop.repository.ProductRepository;
 import com.dailycodework.agroshop.repository.specs.PedidoSpecs;
 import com.dailycodework.agroshop.service.Cart.ICartService;
 
@@ -38,9 +38,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderService implements IOrderService{
 
-    private final PedidoRepository repository;
-    private final ProdutoRepository produtoRepository;
-    private final EnderecoRepository enderecoRepository;
+    private final OrderRepository repository;
+    private final ProductRepository produtoRepository;
+    private final AddressRepository enderecoRepository;
 
     private final OrderAvaliator validator;
     private final ICartService carrinhoService;
@@ -91,7 +91,7 @@ public class OrderService implements IOrderService{
 
     @Override
     public List<OrderSearchDTO> pedidosUsuario(UUID usuarioId) {
-        return repository.findByUsuarioId(usuarioId).stream()   
+        return repository.findByUserId(usuarioId).stream()   
                 .map(mapper::toDTO)
                 .toList();
     } 
@@ -183,7 +183,7 @@ public class OrderService implements IOrderService{
     private List<OrderItem> criarItens(Order pedido, Cart carrinho){
         return carrinho.getItems().stream() 
                     .map(item -> {
-                        Product produto = item.getProduto();
+                        Product produto = item.getProduct();
                         produto.setEstoque(produto.getEstoque() - item.getQuantidade());
                         produtoRepository.save(produto);
                         return new OrderItem(
@@ -197,7 +197,7 @@ public class OrderService implements IOrderService{
 
     private Order criarPedido(Cart carrinho){
         Order pedido = new Order();
-        pedido.setUsuario(carrinho.getUsuario());
+        pedido.setUser(carrinho.getUser());
         pedido.setStatus(PedidoStatus.PENDENTE);
         return pedido;
     }

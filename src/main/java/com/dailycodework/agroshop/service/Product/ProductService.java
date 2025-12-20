@@ -13,24 +13,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.ProductSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.ProductRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.ProductSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.ProductUpdateDTO;
 import com.dailycodework.agroshop.controller.mapper.ProductMapper;
 import com.dailycodework.agroshop.model.Cart;
-import com.dailycodework.agroshop.model.Category;
 import com.dailycodework.agroshop.model.CartItem;
+import com.dailycodework.agroshop.model.Category;
 import com.dailycodework.agroshop.model.OrderItem;
 import com.dailycodework.agroshop.model.Product;
-import com.dailycodework.agroshop.repository.CategoriaRepository;
-import com.dailycodework.agroshop.repository.ItemCarrinhoRepository;
-import com.dailycodework.agroshop.repository.ItemPedidoRepository;
-import com.dailycodework.agroshop.repository.ProdutoRepository;
-import com.dailycodework.agroshop.service.Category.CategoryService;
-
+import com.dailycodework.agroshop.repository.CartItemRepository;
+import com.dailycodework.agroshop.repository.CategoryRepository;
+import com.dailycodework.agroshop.repository.OrderItemRepository;
+import com.dailycodework.agroshop.repository.ProductRepository;
 import static com.dailycodework.agroshop.repository.specs.ProdutosSpecs.categoriaEqual;
 import static com.dailycodework.agroshop.repository.specs.ProdutosSpecs.precoBetween;
 import static com.dailycodework.agroshop.repository.specs.ProdutosSpecs.searchLike;
+import com.dailycodework.agroshop.service.Category.CategoryService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -40,28 +39,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductService implements IProductService{
 
-    private final ProdutoRepository repository;
+    private final ProductRepository repository;
     private final ProductValidator validator;
     private final ProductMapper mapper;
 
     private final CategoryService categoriaService;
-    private final CategoriaRepository categoriaRepository;
+    private final CategoryRepository categoriaRepository;
 
-    private final ItemCarrinhoRepository itemCarrinhoRepository;
-    private final ItemPedidoRepository itemPedidoRepository;
+    private final CartItemRepository itemCarrinhoRepository;
+    private final OrderItemRepository itemPedidoRepository;
 
     @Override
     public Product addProduto(ProductRegisterDTO dto) {
         Product produto = mapper.toEntity(dto);
+        System.out.println(produto.getCategory().getNome());
         validator.validarCriacaoProduto(produto);
 
-        Category categoria = Optional.ofNullable(categoriaRepository.findByNome(produto.getCategoria().getNome()))
+        Category categoria = Optional.ofNullable(categoriaRepository.findByNome(produto.getCategory().getNome()))
             .orElseGet(() -> {
-                Category novaCategoria = new Category(produto.getCategoria().getNome());
+                Category novaCategoria = new Category(produto.getCategory().getNome());
                 return categoriaRepository.save(novaCategoria);
             });
 
-        produto.setCategoria(categoria);
+        produto.setCategory(categoria);
 
         return repository.save(produto);
     }
@@ -91,22 +91,22 @@ public class ProductService implements IProductService{
     public void deletarProdutoPorId(Long id) {
         repository.findById(id)
             .ifPresentOrElse((var produto) -> {
-                List<CartItem> itens = itemCarrinhoRepository.findByProdutoId(id);
+                List<CartItem> itens = itemCarrinhoRepository.findByProductId(id);
                 itens.forEach(item -> {
-                    Cart carrinho = item.getCarrinho();
+                    Cart carrinho = item.getCart();
                     carrinho.removeItem(item);
                     itemCarrinhoRepository.delete(item);
                 });
 
-                List<OrderItem> itensPedido =  itemPedidoRepository.findByProdutoId(id);
+                List<OrderItem> itensPedido =  itemPedidoRepository.findByProductId(id);
                 itensPedido.forEach(item -> {
-                    item.setProduto(null);
+                    item.setProduct(null);
                     itemPedidoRepository.save(item);
                 });
 
-                Optional.ofNullable(produto.getCategoria())
-                        .ifPresent(categoria -> categoria.getProdutos().remove(produto));
-                produto.setCategoria(null);
+                Optional.ofNullable(produto.getCategory())
+                        .ifPresent(categoria -> categoria.getProducts().remove(produto));
+                produto.setCategory(null);
 
                 repository.deleteById(produto.getId());
             }, () -> {
@@ -168,7 +168,7 @@ public class ProductService implements IProductService{
     @Override
     public List<ProductSearchDTO> getProdutoPorCategoria(String categoriaStr) {
         Category categoria = categoriaService.buscaPorNome(categoriaStr);
-        return repository.findByCategoria(categoria).stream()
+        return repository.findByCategory(categoria).stream()
                                         .map(mapper::toDTO)
                                         .collect(Collectors.toList());
     }
@@ -176,7 +176,7 @@ public class ProductService implements IProductService{
     @Override
     public List<ProductSearchDTO> findOutrosProdutos(String categoriaStr){
         Category categoria = categoriaService.buscaPorNome(categoriaStr);
-        return repository.findTop10ByCategoriaNotOrCategoriaIsNull(categoria).stream()
+        return repository.findTop10ByCategoryNotOrCategoryIsNull(categoria).stream()
                                     .map(mapper::toDTO)
                                     .collect(Collectors.toList());
     }

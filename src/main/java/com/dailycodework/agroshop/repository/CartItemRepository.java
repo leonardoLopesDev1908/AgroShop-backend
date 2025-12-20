@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.dailycodework.agroshop.model.CartItem;
 
 @Repository
-public interface ItemCarrinhoRepository extends JpaRepository<CartItem, Long>{
+public interface CartItemRepository extends JpaRepository<CartItem, Long>{
 
-    List<CartItem> findByProdutoId(Long id);
-    void deleteAllByCarrinhoId(Long id);
-    List<CartItem> getAllByCarrinhoId(Long id);
+    List<CartItem> findByProductId(Long id);
+    void deleteAllByCartId(Long id);
+    List<CartItem> getAllByCartId(Long id);
 }

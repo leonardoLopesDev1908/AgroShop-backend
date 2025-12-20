@@ -42,7 +42,7 @@ public class Address {
     private String cep;
 
     @ManyToOne
-    @JoinColumn(name="usuario_id")
+    @JoinColumn(name="user_id")
     @JsonIgnore
-    private User usuario;
+    private User user;
 }

@@ -45,8 +45,8 @@ public class PaymentService {
         log.info("Pedido: "+ pedido);
 
         PayerDTO payer = new PayerDTO(
-            pedido.getUsuario().getNome(),
-            pedido.getUsuario().getEmail()
+            pedido.getUser().getNome(),
+            pedido.getUser().getEmail()
         );
         
         log.info("payer: "+ payer);
@@ -60,7 +60,7 @@ public class PaymentService {
         log.info("backUrls: "+backUrls);
 
         System.out.println(pedido.getEnderecoId());
-        Address endereco = usuarioService.getEnderecoById(pedido.getUsuario(), pedido.getEnderecoId());
+        Address endereco = usuarioService.getEnderecoById(pedido.getUser(), pedido.getEnderecoId());
 
         DeliveryAddressDTO deliveryDTO = new DeliveryAddressDTO(
             endereco.getCep(),
@@ -76,7 +76,7 @@ public class PaymentService {
         List<ItemDTO> items = pedido.getItens().stream()
             .map(item -> new ItemDTO(
                 item.getId(),
-                item.getProduto().getNome(),
+                item.getProduct().getNome(),
                 item.getQuantidade(),
                 item.getPreco()
             ))
@@ -97,7 +97,7 @@ public class PaymentService {
         );
 
         CreatePreferenceRequestDTO request = new CreatePreferenceRequestDTO(
-            pedido.getUsuario().getId(),
+            pedido.getUser().getId(),
             pedido.getValorTotal(),
             payer,
             backUrls,

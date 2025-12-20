@@ -3,7 +3,7 @@ package com.dailycodework.agroshop.service.Frete;
 import java.io.IOException;
 import java.util.List;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.FreteDTO;
+import com.dailycodework.agroshop.controller.dto.search.FreteDTO;
 
 public interface IFreteService {
     

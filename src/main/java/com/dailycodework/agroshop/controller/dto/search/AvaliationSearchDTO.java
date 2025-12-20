@@ -1,4 +1,4 @@
-package com.dailycodework.agroshop.controller.dto.pesquisa;
+package com.dailycodework.agroshop.controller.dto.search;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

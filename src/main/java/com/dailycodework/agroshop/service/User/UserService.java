@@ -10,19 +10,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.AddressSearchDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.UserSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.AddressRegisterDTO;
 import com.dailycodework.agroshop.controller.dto.register.UserRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.AddressSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.UserSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.UserUpdateDTO;
 import com.dailycodework.agroshop.controller.mapper.AddressMapper;
 import com.dailycodework.agroshop.controller.mapper.UserMapper;
 import com.dailycodework.agroshop.model.Address;
 import com.dailycodework.agroshop.model.Role;
 import com.dailycodework.agroshop.model.User;
-import com.dailycodework.agroshop.repository.EnderecoRepository;
+import com.dailycodework.agroshop.repository.AddressRepository;
 import com.dailycodework.agroshop.repository.RoleRepository;
-import com.dailycodework.agroshop.repository.UsuarioRepository;
+import com.dailycodework.agroshop.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -32,12 +32,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
 
-    private final UsuarioRepository repository;
+    private final UserRepository repository;
     private final UserMapper mapper;
     private final UserValidator validator;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final EnderecoRepository enderecoRepository;
+    private final AddressRepository enderecoRepository;
     private final AddressMapper enderecoMapper;
 
     @Override
@@ -56,7 +56,7 @@ public class UserService implements IUserService {
         List<Address> end = dto.endereco()
                                     .stream()
                                     .map(enderecoMapper::toEntity)
-                                    .peek(endereco -> endereco.setUsuario(usuario))
+                                    .peek(endereco -> endereco.setUser(usuario))
                                     .collect(Collectors.toList());
         usuario.setEndereco(end);
 
@@ -66,7 +66,7 @@ public class UserService implements IUserService {
     @Override
     public AddressSearchDTO cadastraEndereco(AddressRegisterDTO dto, User user){
         Address endereco = enderecoMapper.toEntity(dto);
-        endereco.setUsuario(user);
+        endereco.setUser(user);
         return enderecoMapper.toDTO(enderecoRepository.save(endereco));
     }
 
@@ -97,7 +97,7 @@ public class UserService implements IUserService {
 
     @Override
     public List<AddressSearchDTO> getEnderecos(User usuario){
-        List<Address> enderecos = enderecoRepository.getEnderecoByUsuario(usuario);
+        List<Address> enderecos = enderecoRepository.getAddressByUser(usuario);
         return enderecos.stream()   
                         .map(enderecoMapper::toDTO)
                         .collect(Collectors.toList());
@@ -106,7 +106,7 @@ public class UserService implements IUserService {
     @Override 
     public Address getEnderecoById(User usuario, UUID id){
         System.out.println("getEnderecoById");
-        List<Address> enderecos = enderecoRepository.getEnderecoByUsuario(usuario);
+        List<Address> enderecos = enderecoRepository.getAddressByUser(usuario);
         for(Address endereco : enderecos){
             System.out.println(endereco.getId()+" " + id);
             if(endereco.getId().equals(id)){

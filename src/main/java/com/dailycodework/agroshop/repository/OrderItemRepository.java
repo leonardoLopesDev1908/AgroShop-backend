@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.dailycodework.agroshop.model.OrderItem;
 
 @Repository
-public interface ItemPedidoRepository extends JpaRepository<OrderItem, Long>{
+public interface OrderItemRepository extends JpaRepository<OrderItem, Long>{
     
-    List<OrderItem> findByProdutoId(Long id);
+    List<OrderItem> findByProductId(Long id);
 }

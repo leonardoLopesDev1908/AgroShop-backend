@@ -6,15 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.dailycodework.agroshop.model.Avaliacao;
-import com.dailycodework.agroshop.model.User;
 import com.dailycodework.agroshop.model.Product;
+import com.dailycodework.agroshop.model.User;
 
 @Repository
 public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long>  {
     
-    List<Avaliacao> findAllByProduto(Product produto);
+    List<Avaliacao> findAllByProduct(Product produto);
 
     void deleteByCodigoPublico(String codigoPublico);
     
-    boolean existsByUsuarioAndProduto(User user, Product produto);
+    boolean existsByUserAndProduct(User user, Product produto);
 }

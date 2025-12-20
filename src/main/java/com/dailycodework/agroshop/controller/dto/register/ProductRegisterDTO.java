@@ -22,7 +22,7 @@ public record ProductRegisterDTO(
                 @NotBlank(message="Campo obrigatório")
                 String descricao,
                 @NotNull(message="Campo obrigatório")
-                Category categoria,
+                Category category,
                 @NotNull(message="Campo obrigatório")
                 BigDecimal peso,
                 @NotNull(message="Campo obrigatório")

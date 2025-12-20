@@ -7,12 +7,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.CartItemSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.CartItemSearchDTO;
 import com.dailycodework.agroshop.controller.mapper.CartItemMapper;
 import com.dailycodework.agroshop.model.Cart;
 import com.dailycodework.agroshop.model.User;
-import com.dailycodework.agroshop.repository.CarrinhoRepository;
-import com.dailycodework.agroshop.repository.ItemCarrinhoRepository;
+import com.dailycodework.agroshop.repository.CartItemRepository;
+import com.dailycodework.agroshop.repository.CartRepository;
 import com.dailycodework.agroshop.service.User.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -24,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CartService implements ICartService {
 
-    private final CarrinhoRepository repository;
-    private final ItemCarrinhoRepository itemRepository;
+    private final CartRepository repository;
+    private final CartItemRepository itemRepository;
     private final CartItemMapper mapper;
     private final UserService userService;
 
@@ -38,12 +38,12 @@ public class CartService implements ICartService {
 
     @Override
     public Cart buscarPorIdUsuario(User user){
-        return repository.findByUsuarioId(user.getId());
+        return repository.findByUserId(user.getId());
     }
 
     @Override
     public Cart buscarPorEmailUsuario(String email) {
-        return repository.findByUsuarioEmail(email);
+        return repository.findByUserEmail(email);
     }   
 
     @Transactional
@@ -52,7 +52,7 @@ public class CartService implements ICartService {
         Cart carrinho = repository.findById(id).orElseThrow(() -> {
             throw new EntityNotFoundException("Carrinho não encontrado");
         });
-        itemRepository.deleteAllByCarrinhoId(id);
+        itemRepository.deleteAllByCartId(id);
         carrinho.limpar();
         repository.deleteById(id);
     }
@@ -61,7 +61,7 @@ public class CartService implements ICartService {
     public Cart novoCarro(User usuario) {
         return Optional.ofNullable(buscarPorIdUsuario(usuario)).orElseGet(() -> {
             Cart carrinho = new Cart();
-            carrinho.setUsuario(usuario);
+            carrinho.setUser(usuario);
             return repository.save(carrinho);
         });
     }
@@ -78,7 +78,7 @@ public class CartService implements ICartService {
     public List<CartItemSearchDTO> todosItens(String email){
         User usuario = (userService.buscarPorEmail(email));
         Cart carrinho = usuario.getCarrinho();
-        return itemRepository.getAllByCarrinhoId(carrinho.getId()).stream()
+        return itemRepository.getAllByCartId(carrinho.getId()).stream()
                     .map(mapper::toDTO)
                     .collect(Collectors.toList());
     }

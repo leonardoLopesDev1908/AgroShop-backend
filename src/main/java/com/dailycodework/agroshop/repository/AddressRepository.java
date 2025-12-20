@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.dailycodework.agroshop.model.Address;
 import com.dailycodework.agroshop.model.User;
 
-public interface EnderecoRepository extends JpaRepository<Address, UUID> {
+public interface AddressRepository extends JpaRepository<Address, UUID> {
     
-    List<Address> getEnderecoByUsuario(User usuario);
+    List<Address> getAddressByUser(User usuario);
     Optional<Address> findByCepAndNumeroAndComplemento(String cep, 
                                                         String numero, 
                                                         String complemento);

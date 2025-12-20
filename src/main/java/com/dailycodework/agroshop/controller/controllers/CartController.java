@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.CartItemSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.CartItemSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.CartItemUpdateDTO;
 import com.dailycodework.agroshop.model.Cart;
 import com.dailycodework.agroshop.model.User;

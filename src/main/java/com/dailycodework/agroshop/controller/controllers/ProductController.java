@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.ProductSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.ProductRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.ProductSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.ProductUpdateDTO;
 import com.dailycodework.agroshop.controller.mapper.ProductMapper;
 import com.dailycodework.agroshop.model.Product;
@@ -90,14 +90,14 @@ public class ProductController {
     }
 
     @GetMapping("/produto/categoria")
-    public ResponseEntity<ApiResponse> getCategoria(@RequestParam String categoria){
-        List<ProductSearchDTO> produtos = service.getProdutoPorCategoria(categoria);
+    public ResponseEntity<ApiResponse> getCategoria(@RequestParam String category){
+        List<ProductSearchDTO> produtos = service.getProdutoPorCategoria(category);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", produtos));
     }
 
     @GetMapping("/outros")
-    public ResponseEntity<ApiResponse> getOutros(@RequestParam String categoria){
-        List<ProductSearchDTO> produtos = service.findOutrosProdutos(categoria);
+    public ResponseEntity<ApiResponse> getOutros(@RequestParam String category){
+        List<ProductSearchDTO> produtos = service.findOutrosProdutos(category);
         return ResponseEntity.ok(new ApiResponse("Sucesso!", produtos));
     }
 }

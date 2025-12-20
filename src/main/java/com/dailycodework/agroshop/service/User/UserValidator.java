@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.dailycodework.agroshop.controller.dto.update.UserUpdateDTO;
 import com.dailycodework.agroshop.model.User;
-import com.dailycodework.agroshop.repository.UsuarioRepository;
+import com.dailycodework.agroshop.repository.UserRepository;
 
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserValidator {
     
-    private final UsuarioRepository repository;
+    private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     public void validar(User usuario){

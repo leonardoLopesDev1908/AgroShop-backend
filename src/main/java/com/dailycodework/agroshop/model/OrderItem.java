@@ -34,18 +34,18 @@ public class OrderItem {
     private BigDecimal preco;
 
     @ManyToOne
-    @JoinColumn(name="pedido_id")
+    @JoinColumn(name="order_id")
     @JsonIgnore
-    private Order pedido;
+    private Order order;
 
     @ManyToOne
-    @JoinColumn(name="produto_id")
-    private Product produto;
+    @JoinColumn(name="product_id")
+    private Product product;
 
-    public OrderItem(Order pedido, BigDecimal preco, Product produto, int quantidade){
-        this.pedido = pedido;
+    public OrderItem(Order order, BigDecimal preco, Product product, int quantidade){
+        this.order = order;
         this.preco = preco;
-        this.produto = produto;
+        this.product = product;
         this.quantidade = quantidade;
     }
 

@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.dailycodework.agroshop.controller.controllers.CartController;
-import com.dailycodework.agroshop.controller.dto.pesquisa.CartItemSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.CartItemSearchDTO;
 import com.dailycodework.agroshop.model.Cart;
 import com.dailycodework.agroshop.model.User;
 import com.dailycodework.agroshop.service.Cart.ICartService;

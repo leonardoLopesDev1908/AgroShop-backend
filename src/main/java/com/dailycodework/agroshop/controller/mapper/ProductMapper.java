@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.ProductSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.ProductRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.ProductSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.ProductUpdateDTO;
 import com.dailycodework.agroshop.model.Product;
 

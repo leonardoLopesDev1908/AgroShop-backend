@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.ProductSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.ProductRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.ProductSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.ProductUpdateDTO;
 import com.dailycodework.agroshop.model.Product;
 

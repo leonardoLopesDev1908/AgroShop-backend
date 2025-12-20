@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.ImageSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.ImageSearchDTO;
 import com.dailycodework.agroshop.model.Image;
 import com.dailycodework.agroshop.response.ApiResponse;
 import com.dailycodework.agroshop.service.Image.IImageService;
@@ -76,7 +76,7 @@ public class ImageController {
     public ResponseEntity<ApiResponse> deletarImagem(@PathVariable Long id){
         try {
             service.deletePorId(id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Deletado", null));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse("Deletado", null));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiResponse("Não encontrado", e.getMessage()));

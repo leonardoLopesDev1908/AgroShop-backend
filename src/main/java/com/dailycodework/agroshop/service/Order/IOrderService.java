@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.AddressSearchDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.CompleteOrderDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.OrderSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.AddressSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.CompleteOrderDTO;
+import com.dailycodework.agroshop.controller.dto.search.OrderSearchDTO;
 import com.dailycodework.agroshop.model.Order;
 import com.dailycodework.agroshop.model.User;
 

@@ -49,23 +49,23 @@ public class User {
 
     private String telefone;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval=true, fetch= FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true, fetch= FetchType.LAZY)
     @JsonManagedReference
     private List<Address> endereco;
 
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Avaliacao> avaliacoes;
 
-    @OneToOne(mappedBy = "usuario", cascade= CascadeType.ALL, orphanRemoval=true)
+    @OneToOne(mappedBy = "user", cascade= CascadeType.ALL, orphanRemoval=true)
     private Cart carrinho;
 
-    @OneToMany(mappedBy = "usuario", cascade=CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL, orphanRemoval=true)
     private List<Order> pedidos;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = 
                     {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "usuario_roles", joinColumns= @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
+    @JoinTable(name = "user_roles", joinColumns= @JoinColumn(name = "user_id", referencedColumnName = "id"),
                             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles = new HashSet<>();
 

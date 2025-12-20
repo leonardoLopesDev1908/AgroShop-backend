@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.FreteDTO;
+import com.dailycodework.agroshop.controller.dto.search.FreteDTO;
 import com.dailycodework.agroshop.model.Cart;
 import com.dailycodework.agroshop.model.CartItem;
 import com.dailycodework.agroshop.model.Product;
@@ -142,7 +142,7 @@ public class FreteService implements IFreteService{
         
         for(CartItem item : carrinho.getItems()){
             ObjectNode productNode = objectMapper.createObjectNode();
-            Product produto = item.getProduto();
+            Product produto = item.getProduct();
 
             productNode.put("id", produto.getId());
             productNode.put("weight", produto.getPeso());

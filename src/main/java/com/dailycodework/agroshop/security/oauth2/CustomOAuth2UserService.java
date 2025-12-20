@@ -9,14 +9,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.dailycodework.agroshop.model.User;
-import com.dailycodework.agroshop.repository.UsuarioRepository;
+import com.dailycodework.agroshop.repository.UserRepository;
 import com.dailycodework.agroshop.security.user.ShopUserDetails;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService{
  
     @Autowired
-    private UsuarioRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest){

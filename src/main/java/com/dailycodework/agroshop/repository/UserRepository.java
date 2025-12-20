@@ -10,14 +10,14 @@ import org.springframework.stereotype.Repository;
 import com.dailycodework.agroshop.model.User;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByEmail(String email);
     List<User> findByNome(String nome);
     User findByEmail(String email);
 
     @Query("""
-            SELECT COUNT(c) FROM Usuario c
+            SELECT COUNT(c) FROM User c
             JOIN c.roles r
             WHERE r.nome = 'Cliente'
             """)

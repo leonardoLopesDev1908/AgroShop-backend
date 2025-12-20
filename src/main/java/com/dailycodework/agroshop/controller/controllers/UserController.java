@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.AddressSearchDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.UserSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.AddressRegisterDTO;
 import com.dailycodework.agroshop.controller.dto.register.UserRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.AddressSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.UserSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.UpdatePassword;
 import com.dailycodework.agroshop.controller.dto.update.UserUpdateDTO;
 import com.dailycodework.agroshop.controller.mapper.UserMapper;

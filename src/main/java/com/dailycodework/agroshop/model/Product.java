@@ -60,20 +60,20 @@ public class Product {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
-    private Category categoria;
+    private Category category;
 
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true, fetch= FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch= FetchType.EAGER)
     private List<Image> imagens;
 
-    @OneToMany(mappedBy = "produto", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch=FetchType.EAGER)
     private List<Avaliacao> avaliacoes;
     
     public Product(String nome, String marca, BigDecimal preco, 
-        int estoque, Category categoria, String descricao){
+        int estoque, Category category, String descricao){
         this.nome = nome;
         this.preco = preco;
         this.marca = marca;
         this.estoque = estoque;
-        this.categoria = categoria;
+        this.category = category;
     }
 }
