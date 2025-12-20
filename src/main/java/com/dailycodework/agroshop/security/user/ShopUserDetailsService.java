@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.dailycodework.agroshop.model.User;
-import com.dailycodework.agroshop.repository.UsuarioRepository;
+import com.dailycodework.agroshop.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShopUserDetailsService implements UserDetailsService {
     
-    private final UsuarioRepository repository;
+    private final UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

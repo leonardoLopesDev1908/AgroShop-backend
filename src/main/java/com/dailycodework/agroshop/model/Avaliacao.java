@@ -39,12 +39,12 @@ public class Avaliacao {
     private String codigoPublico;
 
     @ManyToOne
-    @JoinColumn(name="usuario_id")
+    @JoinColumn(name="user_id")
     @JsonIgnore
-    private User usuario;
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name="produto_id")
+    @JoinColumn(name="product_id")
     @JsonIgnore
-    private Product produto;
+    private Product product;
 }

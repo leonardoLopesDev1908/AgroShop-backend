@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.ImageSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.ImageSearchDTO;
 import com.dailycodework.agroshop.model.Image;
 
 public interface IImageService {

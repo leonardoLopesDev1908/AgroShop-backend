@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.dailycodework.agroshop.model.Cart;
 
 @Repository
-public interface CarrinhoRepository extends JpaRepository<Cart, Long>{
-    Cart findByUsuarioEmail(String email);
-    Cart findByUsuarioId(UUID id);
+public interface CartRepository extends JpaRepository<Cart, Long>{
+    Cart findByUserEmail(String email);
+    Cart findByUserId(UUID id);
 }

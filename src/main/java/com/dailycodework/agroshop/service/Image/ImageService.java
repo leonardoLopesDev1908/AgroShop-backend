@@ -10,12 +10,11 @@ import javax.sql.rowset.serial.SerialBlob;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.ImageSearchDTO;
-import com.dailycodework.agroshop.controller.dto.register.ImageRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.ImageSearchDTO;
 import com.dailycodework.agroshop.controller.mapper.ImageMapper;
 import com.dailycodework.agroshop.model.Image;
 import com.dailycodework.agroshop.model.Product;
-import com.dailycodework.agroshop.repository.ImagemRepository;
+import com.dailycodework.agroshop.repository.ImageRepository;
 import com.dailycodework.agroshop.service.Product.ProductService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -25,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ImageService implements IImageService{
 
-    private final ImagemRepository repository;
+    private final ImageRepository repository;
     private final ProductService produtoService;
     private final ImageMapper mapper;
 
@@ -68,7 +67,7 @@ public class ImageService implements IImageService{
                 imagem.setArquivoNome(file.getOriginalFilename());
                 imagem.setArquivoTipo(file.getContentType());
                 imagem.setImage(new SerialBlob(file.getBytes()));
-                imagem.setProduto(produto);
+                imagem.setProduct(produto);
 
                 String buildDownloadUrl = "/api/v1/images/imagem/download/";
                 String downloadUrl = buildDownloadUrl + imagem.getId();

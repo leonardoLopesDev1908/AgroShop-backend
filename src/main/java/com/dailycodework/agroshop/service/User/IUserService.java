@@ -3,10 +3,10 @@ package com.dailycodework.agroshop.service.User;
 import java.util.List;
 import java.util.UUID;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.AddressSearchDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.UserSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.AddressRegisterDTO;
 import com.dailycodework.agroshop.controller.dto.register.UserRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.AddressSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.UserSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.UserUpdateDTO;
 import com.dailycodework.agroshop.model.Address;
 import com.dailycodework.agroshop.model.User;

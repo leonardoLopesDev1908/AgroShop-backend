@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.springframework.stereotype.Component;
 
 import com.dailycodework.agroshop.model.Product;
-import com.dailycodework.agroshop.repository.ProdutoRepository;
+import com.dailycodework.agroshop.repository.ProductRepository;
 
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductValidator {
     
-    private final ProdutoRepository repository;
+    private final ProductRepository repository;
 
     public void validarCriacaoProduto(Product produto){ 
         validaUnicidade(produto, null);

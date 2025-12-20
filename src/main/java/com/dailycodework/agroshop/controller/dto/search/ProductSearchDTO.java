@@ -1,4 +1,4 @@
-package com.dailycodework.agroshop.controller.dto.pesquisa;
+package com.dailycodework.agroshop.controller.dto.search;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,6 +12,6 @@ public record ProductSearchDTO(
             BigDecimal preco,
             int estoque,
             String descricao,
-            Category categoria,
+            Category category,
             List<ImageSearchDTO> imagens
 ) {}

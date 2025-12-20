@@ -1,7 +1,7 @@
-package com.dailycodework.agroshop.controller.dto.pesquisa;
+package com.dailycodework.agroshop.controller.dto.search;
 
 public record OrderItemSearchDTO (
                         Long id,
                         Integer quantidade,
-                        ProductSearchDTO produto
+                        ProductSearchDTO product
 ) {}

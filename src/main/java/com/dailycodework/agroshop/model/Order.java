@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "orders")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -54,10 +54,10 @@ public class Order {
     private UUID enderecoId;
 
     @ManyToOne 
-    @JoinColumn(name = "usuario_id")    
-    private User usuario;
+    @JoinColumn(name = "user_id")    
+    private User user;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> itens = new HashSet<>();
 
 }

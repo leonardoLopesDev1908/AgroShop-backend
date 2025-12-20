@@ -35,7 +35,7 @@ public class PedidoSpecs {
             if(email == null || email.trim().isEmpty()){
                 return cb.conjunction();
             }
-            Join<Order, User> usuarioJoin = root.join("usuario", JoinType.INNER);
+            Join<Order, User> usuarioJoin = root.join("user", JoinType.INNER);
             
             return cb.equal(usuarioJoin.get("email"), email);
         };

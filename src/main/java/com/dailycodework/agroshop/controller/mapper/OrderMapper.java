@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import com.dailycodework.agroshop.controller.dto.payments.CreatePreferenceRequestDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.OrderSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.OrderRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.OrderSearchDTO;
 import com.dailycodework.agroshop.model.Order;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

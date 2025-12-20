@@ -35,6 +35,6 @@ public class Image {
     private String downloadUrl;
 
     @ManyToOne
-    @JoinColumn(name = "produto_id")
-    private Product produto;
+    @JoinColumn(name = "product_id")
+    private Product product;
 }

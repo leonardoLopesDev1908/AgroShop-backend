@@ -17,10 +17,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.AddressSearchDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.FreteDTO;
-import com.dailycodework.agroshop.controller.dto.pesquisa.FreteDTO.Company;
-import com.dailycodework.agroshop.controller.dto.pesquisa.OrderSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.AddressSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.FreteDTO;
+import com.dailycodework.agroshop.controller.dto.search.OrderSearchDTO;
+import com.dailycodework.agroshop.controller.dto.search.FreteDTO.Company;
 import com.dailycodework.agroshop.controller.dto.update.StatusRequest;
 import com.dailycodework.agroshop.model.Order;
 import com.dailycodework.agroshop.model.User;

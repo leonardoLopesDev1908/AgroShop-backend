@@ -30,7 +30,7 @@ public class ProdutosSpecs {
                 return cb.conjunction();
             }
 
-            return cb.equal(root.get("categoria"), categoria);
+            return cb.equal(root.get("category"), categoria);
         };
     }
 

@@ -12,20 +12,20 @@ import com.dailycodework.agroshop.model.Category;
 import com.dailycodework.agroshop.model.Product;
 
 @Repository
-public interface ProdutoRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>{
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>{
     
     List<Product> findByNomeContaining(String nome); 
     List<Product> findByMarcaContaining(String marca);
-    List<Product> findByCategoria(Category categoria);
+    List<Product> findByCategory(Category categoria);
     
-    @Query("SELECT p FROM Produto p WHERE p.categoria <> :categoria OR p.categoria IS NULL")
-    List<Product> findTop10ByCategoriaNotOrCategoriaIsNull(@Param("categoria") Category categoria);
+    @Query("SELECT p FROM Product p WHERE p.category <> :category OR p.category IS NULL")
+    List<Product> findTop10ByCategoryNotOrCategoryIsNull(@Param("category") Category categoria);
 
     List<Product> findByMarcaAndNome(String marca, String nome);
     boolean existsByNomeAndMarca(String nome, String marca);
     boolean existsByNomeAndMarcaAndIdNot(String nome, String marca, Long id);
     Integer findEstoqueById(Long id);
 
-    @Query("SELECT COUNT(p) FROM Produto p ORDER BY COUNT(p)")
+    @Query("SELECT COUNT(p) FROM Product p ORDER BY COUNT(p)")
     Integer totalProdutos();
 }

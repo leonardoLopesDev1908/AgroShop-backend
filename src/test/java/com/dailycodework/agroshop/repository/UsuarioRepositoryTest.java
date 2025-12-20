@@ -21,10 +21,10 @@ import com.dailycodework.agroshop.model.User;
 public class UsuarioRepositoryTest {
     
     @Autowired 
-    private UsuarioRepository usuarioRepository;
+    private UserRepository usuarioRepository;
 
     @Autowired
-    private EnderecoRepository enderecoRepository;
+    private AddressRepository enderecoRepository;
 
     @Autowired 
     private RoleRepository roleRepository;

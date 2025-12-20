@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.dailycodework.agroshop.model.Category;
 
 @Repository
-public interface CategoriaRepository extends JpaRepository<Category, Long>{
+public interface CategoryRepository extends JpaRepository<Category, Long>{
 
     Category findByNome(String nome);
     boolean existsByNome(String nome);

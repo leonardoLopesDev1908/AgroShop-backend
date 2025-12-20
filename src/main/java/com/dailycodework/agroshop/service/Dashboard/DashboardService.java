@@ -9,9 +9,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.dailycodework.agroshop.repository.PedidoRepository;
-import com.dailycodework.agroshop.repository.ProdutoRepository;
-import com.dailycodework.agroshop.repository.UsuarioRepository;
+import com.dailycodework.agroshop.repository.OrderRepository;
+import com.dailycodework.agroshop.repository.ProductRepository;
+import com.dailycodework.agroshop.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,9 +19,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DashboardService implements IDashboardService {
 
-    private final ProdutoRepository produtoRepository;
-    private final PedidoRepository pedidoRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final ProductRepository produtoRepository;
+    private final OrderRepository pedidoRepository;
+    private final UserRepository usuarioRepository;
 
     @Override
     public BigDecimal totalVendas(LocalDate dataInicio, LocalDate dataFim) {

@@ -1,4 +1,4 @@
-package com.dailycodework.agroshop.controller.dto.pesquisa;
+package com.dailycodework.agroshop.controller.dto.search;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,6 +12,5 @@ public record OrderSearchDTO(
                     Set<OrderItemSearchDTO> itens,
                     PedidoStatus status,
                     UserSearchDTO usuario,
-                    BigDecimal frete,
-                    AddressSearchDTO endereco
+                    BigDecimal frete
 ) {}

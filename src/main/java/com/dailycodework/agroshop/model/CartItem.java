@@ -31,19 +31,19 @@ public class CartItem {
     private int quantidade;
     
     @ManyToOne
-    @JoinColumn(name = "produto_id")
-    private Product produto;
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "carrinho_id")
+    @JoinColumn(name = "cart_id")
     @JsonIgnore
-    private Cart carrinho;
+    private Cart cart;
 
     public BigDecimal getPrecoUnitario(){
-        return this.produto.getPreco();
+        return this.product.getPreco();
     }
 
     public BigDecimal getPrecoTotal(){
-        return this.produto.getPreco().multiply(BigDecimal.valueOf(quantidade));
+        return this.product.getPreco().multiply(BigDecimal.valueOf(quantidade));
     }
 }

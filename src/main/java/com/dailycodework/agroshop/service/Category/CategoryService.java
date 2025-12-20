@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.dailycodework.agroshop.controller.dto.register.CategoryRegisterDTO;
 import com.dailycodework.agroshop.controller.mapper.CategoryMapper;
 import com.dailycodework.agroshop.model.Category;
-import com.dailycodework.agroshop.repository.CategoriaRepository;
+import com.dailycodework.agroshop.repository.CategoryRepository;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryService implements ICategoryService{
     
-    private final CategoriaRepository repository;
+    private final CategoryRepository repository;
     private final CategoryMapper mapper;
 
     @Override

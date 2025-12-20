@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dailycodework.agroshop.controller.dto.pesquisa.AvaliationSearchDTO;
 import com.dailycodework.agroshop.controller.dto.register.AvaliationRegisterDTO;
+import com.dailycodework.agroshop.controller.dto.search.AvaliationSearchDTO;
 import com.dailycodework.agroshop.model.User;
 import com.dailycodework.agroshop.response.ApiResponse;
 import com.dailycodework.agroshop.service.Avaliation.AvaliationService;

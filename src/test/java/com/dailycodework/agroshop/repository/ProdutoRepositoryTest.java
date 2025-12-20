@@ -15,10 +15,10 @@ import com.dailycodework.agroshop.model.Product;
 public class ProdutoRepositoryTest {
 
     @Autowired
-    private ProdutoRepository produtoRepository;
+    private ProductRepository produtoRepository;
 
     @Autowired 
-    private CategoriaRepository categoriaRepository;
+    private CategoryRepository categoriaRepository;
     
     @Test
     @DisplayName("Testando cadastro de produto")
@@ -31,7 +31,7 @@ public class ProdutoRepositoryTest {
         p.setMarca("NexGard");
         p.setPreco(BigDecimal.valueOf(82.9));
         p.setEstoque(10);
-        p.setCategoria(c);
+        p.setCategory(c);
         p.setDescricao(
             "Antipulgas e Carrapatos NexGard para Cachorros de 4,1 a 10 Kg ( 28,3 mg ) � 1 Comprimido" 
         );
@@ -44,8 +44,8 @@ public class ProdutoRepositoryTest {
 
         assertThat(produtoSalvo.getId()).isNotNull();
         assertThat(produtoSalvo.getNome()).isEqualTo("Antipulgas");
-        assertThat(produtoSalvo.getCategoria()).isNotNull();
-        assertThat(produtoSalvo.getCategoria().getNome()).isEqualTo("Remedios");
+        assertThat(produtoSalvo.getCategory()).isNotNull();
+        assertThat(produtoSalvo.getCategory().getNome()).isEqualTo("Remedios");
         assertThat(produtoSalvo.getAltura()).isNotNull();
         assertThat(produtoSalvo.getPeso()).isNotNull();
         assertThat(produtoSalvo.getComprimento()).isNotNull();
@@ -89,7 +89,7 @@ public class ProdutoRepositoryTest {
         p.setMarca("NexGard");
         p.setPreco(BigDecimal.valueOf(82.9));
         p.setEstoque(10);
-        p.setCategoria(c);
+        p.setCategory(c);
         p.setDescricao(
             "Antipulgas e Carrapatos NexGard para Cachorros de 4,1 a 10 Kg ( 28,3 mg ) � 1 Comprimido" 
         );
