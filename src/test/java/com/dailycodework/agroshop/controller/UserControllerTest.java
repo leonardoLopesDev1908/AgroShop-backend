@@ -53,4 +53,5 @@ public class UserControllerTest{
             .andExpect(jsonPath("$.message").value("Sucesso!"))
             .andExpect(jsonPath("$.data").exists());
     }
+
 }
