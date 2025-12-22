@@ -27,7 +27,7 @@ public class UserControllerTest{
     @MockitoBean
     IUserService userService;
 
-    @MockitoBean
+    @Autowired
     ObjectMapper objectMapper;
 
     @Test
