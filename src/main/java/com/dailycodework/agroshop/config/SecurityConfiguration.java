@@ -78,7 +78,10 @@ public class SecurityConfiguration {
             API + "/carrinho/**",
             API + "/itens/**",
             API + "/pedidos/**",
-            API + "/melhorenvio/frete/itens/cotar"
+            API + "/melhorenvio/frete/itens/cotar",
+            API + "/produto/frete/**",
+            API + "/itens/frete/**",
+            API + "/payment/**"
         };
     }
 

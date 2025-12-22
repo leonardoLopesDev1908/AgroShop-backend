@@ -29,7 +29,8 @@ public record CreatePreferenceRequestDTO (
 
     public record DeliveryAddressDTO(
         String zipCode,
-        String address,
+        String street,
+        String neighborhood,
         String number,
         String complement,
         String city,

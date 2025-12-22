@@ -12,8 +12,8 @@ import com.dailycodework.agroshop.model.User;
 public interface AddressRepository extends JpaRepository<Address, UUID> {
     
     List<Address> getAddressByUser(User usuario);
-    Optional<Address> findByCepAndNumeroAndComplemento(String cep, 
-                                                        String numero, 
-                                                        String complemento);
-    Optional<Address> findByCepAndNumero(String cep, String numero);
+    Optional<Address> findByZipcodeAndNumberAndComplement(String zipcode, 
+                                                        String number, 
+                                                        String complement);
+    Optional<Address> findByZipcodeAndNumber(String zipcode, String number);
 }

@@ -12,15 +12,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.dailycodework.agroshop.controller.dto.search.AddressSearchDTO;
 import com.dailycodework.agroshop.controller.dto.search.FreteDTO;
-import com.dailycodework.agroshop.controller.dto.search.OrderSearchDTO;
 import com.dailycodework.agroshop.controller.dto.search.FreteDTO.Company;
+import com.dailycodework.agroshop.controller.dto.search.OrderSearchDTO;
 import com.dailycodework.agroshop.controller.dto.update.StatusRequest;
 import com.dailycodework.agroshop.model.Order;
 import com.dailycodework.agroshop.model.User;
@@ -56,6 +56,7 @@ public class OrderControllerTest {
 
         AddressSearchDTO endereco = new AddressSearchDTO(
             "a",
+            "bairro",
              "123",
             "ap 101" ,
             "Cidade",

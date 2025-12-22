@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,7 +34,7 @@ public class UserControllerTest{
     void shouldRegisterNewUser() throws Exception {
         List<AddressRegisterDTO> address = List.of(
             new AddressRegisterDTO(
-                "Rua AA", "1234",
+                "Rua AA", "Bairro BB", "1234",
                 "Complement", "City", "State",
                 "91949-123"
             )

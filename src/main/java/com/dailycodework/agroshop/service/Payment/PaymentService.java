@@ -63,12 +63,13 @@ public class PaymentService {
         Address endereco = usuarioService.getEnderecoById(pedido.getUser(), pedido.getEnderecoId());
 
         DeliveryAddressDTO deliveryDTO = new DeliveryAddressDTO(
-            endereco.getCep(),
-            endereco.getEndereco(),
-            endereco.getNumero(),
-            endereco.getComplemento(),
-            endereco.getCidade(),
-            endereco.getEstado()
+            endereco.getZipcode(),
+            endereco.getStreet(),
+            endereco.getNeighborhood(),
+            endereco.getNumber(),
+            endereco.getComplement(),
+            endereco.getCity(),
+            endereco.getState()
         );
 
         log.info("Deliverydto: "+ deliveryDTO);

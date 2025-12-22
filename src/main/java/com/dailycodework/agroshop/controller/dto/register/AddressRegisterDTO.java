@@ -4,15 +4,17 @@ import jakarta.validation.constraints.NotBlank;
 
 public record AddressRegisterDTO(
                 @NotBlank(message="Campo obrigatório")
-                String endereco,
+                String street,
                 @NotBlank(message="Campo obrigatório")
-                String numero,
+                String neighborhood,
                 @NotBlank(message="Campo obrigatório")
-                String complemento,
+                String number,
                 @NotBlank(message="Campo obrigatório")
-                String cidade,
+                String complement,
                 @NotBlank(message="Campo obrigatório")
-                String estado,
+                String city,
                 @NotBlank(message="Campo obrigatório")
-                String cep
+                String state,
+                @NotBlank(message="Campo obrigatório")
+                String zipcode
 ) {}
