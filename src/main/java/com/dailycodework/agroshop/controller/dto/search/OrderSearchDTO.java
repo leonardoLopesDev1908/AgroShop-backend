@@ -11,6 +11,6 @@ public record OrderSearchDTO(
                     LocalDateTime data,
                     Set<OrderItemSearchDTO> itens,
                     PedidoStatus status,
-                    UserSearchDTO usuario,
+                    UserSearchDTO user,
                     BigDecimal frete
 ) {}

@@ -110,7 +110,6 @@ public class UserService implements IUserService {
         for(Address endereco : enderecos){
             System.out.println(endereco.getId()+" " + id);
             if(endereco.getId().equals(id)){
-                System.out.println("Returning: " + endereco);
                 return endereco;
             }
         }

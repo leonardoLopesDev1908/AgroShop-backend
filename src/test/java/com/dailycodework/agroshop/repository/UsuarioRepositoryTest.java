@@ -11,8 +11,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.dailycodework.agroshop.model.Cart;
 import com.dailycodework.agroshop.model.Address;
+import com.dailycodework.agroshop.model.Cart;
 import com.dailycodework.agroshop.model.Role;
 import com.dailycodework.agroshop.model.User;
 
@@ -45,11 +45,13 @@ public class UsuarioRepositoryTest {
     @DisplayName("Testando cadastro de usuário")
     void testCadastroUsuario(){
         Address e = new Address();
-        e.setCep("94975152");
-        e.setCidade("Porto Alegre");
-        e.setComplemento("bloco h, num. 123");
-        e.setEstado("RS");
-        e.setNumero("321");
+        e.setZipcode("94975152");
+        e.setNeighborhood("Restinga");
+        e.setStreet("Rua");
+        e.setCity("Porto Alegre");
+        e.setComplement("bloco h, num. 123");
+        e.setState("RS");
+        e.setNumber("321");
     
         Address enderecoSalvo = enderecoRepository.save(e);
 

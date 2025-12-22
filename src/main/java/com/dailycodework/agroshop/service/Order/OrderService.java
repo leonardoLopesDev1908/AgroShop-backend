@@ -58,21 +58,21 @@ public class OrderService implements IOrderService{
 
         Address endereco; 
         
-        if(enderecoDTO.complemento() != null && !enderecoDTO.complemento().trim().isEmpty()){
-            endereco = enderecoRepository.findByCepAndNumeroAndComplemento(
-                    enderecoDTO.cep(), 
-                    enderecoDTO.numero(), 
-                    enderecoDTO.complemento()).orElseThrow(() -> {
+        if(enderecoDTO.complement() != null && !enderecoDTO.complement().trim().isEmpty()){
+            endereco = enderecoRepository.findByZipcodeAndNumberAndComplement(
+                    enderecoDTO.zipcode(), 
+                    enderecoDTO.number(), 
+                    enderecoDTO.complement()).orElseThrow(() -> {
                     throw new EntityNotFoundException("Endereço não encontrado para a combinação: " +
-                        enderecoDTO.cep()+", "+ enderecoDTO.numero()+", "+enderecoDTO.complemento()
+                        enderecoDTO.zipcode()+", "+ enderecoDTO.number()+", "+enderecoDTO.complement()
                     );
                 });
         } else {
-            endereco = enderecoRepository.findByCepAndNumero(
-                    enderecoDTO.cep(), 
-                    enderecoDTO.numero()).orElseThrow(() -> {
+            endereco = enderecoRepository.findByZipcodeAndNumber(
+                    enderecoDTO.zipcode(), 
+                    enderecoDTO.number()).orElseThrow(() -> {
                     throw new EntityNotFoundException("Endereço não encontrado para a combinação: " +
-                        enderecoDTO.cep()+", "+ enderecoDTO.numero()
+                        enderecoDTO.zipcode()+", "+ enderecoDTO.number()
                     );
                 });
         }

@@ -28,18 +28,20 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String endereco;
+    private String street;
+
+    private String neighborhood;
     
     @NaturalId
-    private String numero;
+    private String number;
 
     @NaturalId
-    private String complemento;
-    private String cidade;
-    private String estado;
+    private String complement;
+    private String city;
+    private String state;
 
     @NaturalId
-    private String cep;
+    private String zipcode;
 
     @ManyToOne
     @JoinColumn(name="user_id")
