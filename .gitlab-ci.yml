@@ -21,7 +21,7 @@ test:
 
 docker:
   stage: docker
-  image: amazon/aws-cli:2
+  image: amazon/aws-cli:latest
   services:
     - docker:26-dind
   variables:
@@ -35,6 +35,6 @@ docker:
 
 deploy:
   stage: deploy
-  image: amazon/aws-cli:2
+  image: amazon/aws-cli:latest
   script: 
     - aws ecs update-service --cluster fantastic-squirrel-hf46vn --service default-myawsrepository-a91a-service-wpgouwwy --force-new-deployment
