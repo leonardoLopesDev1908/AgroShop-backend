@@ -39,8 +39,11 @@ docker:
 
 deploy:
   stage: deploy
-  image: ubuntu:22.04  
+  image: ubuntu:22.04
   before_script:
-    - apt-get update && apt-get install -y awscli  # Amazon Linux: yum install -y awscli
+    - export DEBIAN_FRONTEND=noninteractive
+    - apt-get update
+    - apt-get install -y awscli tzdata
   script:
     - aws ecs update-service --cluster fantastic-squirrel-hf46vn --service default-myawsrepository-a91a-service-wpgouwwy --force-new-deployment
+
