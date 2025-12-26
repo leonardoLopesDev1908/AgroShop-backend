@@ -21,7 +21,7 @@ test:
 
 docker:
   stage: docker
-  image: docker:26
+  image: amazon/aws-cli:2
   services:
     - docker:26-dind
   variables:
