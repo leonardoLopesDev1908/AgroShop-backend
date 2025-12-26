@@ -46,7 +46,7 @@ public class AuthController {
     private Long refreshTokenExpirationTime;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticationUsuario(@RequestBody LoginRequest request, HttpServletResponse response){
+    public ResponseEntity<?> authenticationUser(@RequestBody LoginRequest request, HttpServletResponse response){
       
         Authentication authentication = authenticationManger
                     .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getSenha()));

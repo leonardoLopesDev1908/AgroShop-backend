@@ -1,0 +1,33 @@
+#GIT
+.git
+.gitattributes
+.gitmodules
+
+#Submodule frontend
+AgroShop-frontend/
+
+#Env
+.env
+*.env
+
+#IDE
+.vscode/
+.idea
+
+#Build output
+target/
+
+#Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+#Jenkins
+Jenkinsfile
