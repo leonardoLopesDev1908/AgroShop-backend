@@ -15,7 +15,7 @@ public class CORSConfig {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5174", "https://agro-shop-frontend-phi.vercel.app")
+                        .allowedOrigins( "https://agro-shop-frontend-phi.vercel.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
