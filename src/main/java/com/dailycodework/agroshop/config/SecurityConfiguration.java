@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import com.dailycodework.agroshop.security.jwt.AuthTokenFilter;
 import com.dailycodework.agroshop.security.jwt.JwtEntryPoint;
@@ -149,7 +148,6 @@ public class SecurityConfiguration {
             .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authProvider())
-            .addFilterAfter(authTokenFilter(), CorsFilter.class)
             .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
