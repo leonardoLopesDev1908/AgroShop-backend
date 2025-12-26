@@ -21,13 +21,17 @@ test:
 
 docker:
   stage: docker
-  image: amazon/aws-cli:latest
+  image: docker:26
   services:
     - docker:26-dind
   variables:
     DOCKER_TLS_CERTDIR: ""
-  script: 
-    - docker build -t agroshop/myawsrepository .
+  script:
+    - apk add --no-cache aws-cli
+    - aws --version
+    - docker --version
+
+    - docker build -t agroshop .
     - aws ecr get-login-password --region us-east-2 |
       docker login --username AWS --password-stdin 343218178986.dkr.ecr.us-east-2.amazonaws.com
     - docker tag agroshop:latest 343218178986.dkr.ecr.us-east-2.amazonaws.com/agroshop/myawsrepository:latest
