@@ -136,15 +136,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-            // .csrf(csrf -> csrf
-            //     .ignoringRequestMatchers(
-            //         "/api/v1/auth/login"
-            //     )
-            //     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            //     .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-            // )
-            .csrf(csrf -> csrf.disable())
-            // .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .cors(cors -> cors.disable())
             .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
