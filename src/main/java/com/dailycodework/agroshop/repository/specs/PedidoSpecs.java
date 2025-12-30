@@ -56,7 +56,7 @@ public class PedidoSpecs {
                 predicates.add(cb.lessThanOrEqualTo(root.get("data"), endDate));
             }
 
-            return cb.and(predicates.toArray(new Predicate[0]));
+            return cb.and(predicates.toArray(Predicate[]::new));
         };
     }
 }

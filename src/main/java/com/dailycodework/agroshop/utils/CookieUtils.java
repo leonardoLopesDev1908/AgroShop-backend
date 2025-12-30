@@ -18,7 +18,7 @@ public class CookieUtils{
     public void addCsrfCookie(HttpServletResponse response, String token){
         ResponseCookie cookie = ResponseCookie.from("XSRF-TOKEN", token)
             .httpOnly(false)
-            .secure(true)
+            .secure(useSecureCookie)
             .path("/")
             .sameSite("None")
             .build();
@@ -42,7 +42,7 @@ public class CookieUtils{
 
         ResponseCookie cookie = ResponseCookie.from(name, token)
             .httpOnly(true)
-            .secure(true)
+            .secure(useSecureCookie)
             .path(path)
             .maxAge(maxAge / 1000)
             .sameSite("None")
@@ -78,7 +78,7 @@ public class CookieUtils{
     public void clearTokens(HttpServletResponse response){
         ResponseCookie accessCookie = ResponseCookie.from(ACCESS_TOKEN_COOKIE, "")
             .httpOnly(true)
-            .secure(true)
+            .secure(useSecureCookie)
             .path("/")
             .maxAge(0)
             .sameSite("None")
@@ -86,7 +86,7 @@ public class CookieUtils{
 
         ResponseCookie refreshCookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE, "")
             .httpOnly(true)
-            .secure(true)
+            .secure(useSecureCookie)
             .path("/")
             .maxAge(0)
             .sameSite("None")

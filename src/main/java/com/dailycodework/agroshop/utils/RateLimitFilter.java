@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.stereotype.Component;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
@@ -62,7 +61,6 @@ public class RateLimitFilter implements Filter {
         HttpServletResponse httpResp = (HttpServletResponse) response;
         httpResp.setStatus(429);
         httpResp.getWriter().write("Rate limit exceeded. Try again later.");
-        return;
     }
 
     private boolean isExcluded(String path){

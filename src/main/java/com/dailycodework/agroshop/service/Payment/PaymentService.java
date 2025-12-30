@@ -18,6 +18,8 @@ import com.dailycodework.agroshop.model.Address;
 import com.dailycodework.agroshop.model.Order;
 import com.dailycodework.agroshop.service.Order.OrderService;
 import com.dailycodework.agroshop.service.User.UserService;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,28 +41,22 @@ public class PaymentService {
     private final UserService usuarioService;
 
     public CreatePreferenceResponseDTO createPreference(Long pedidoId){
-        log.info("Entrou no service");
         Order pedido = pedidoService.buscaPedidoPorId(pedidoId);
         
-        log.info("Pedido: "+ pedido);
-
         PayerDTO payer = new PayerDTO(
             pedido.getUser().getNome(),
             pedido.getUser().getEmail()
         );
         
-        log.info("payer: "+ payer);
-
         BackUrlsDTO backUrls = new BackUrlsDTO(
             frontEndUrl + "/payment/success",
             frontEndUrl + "/payment/pending",
             frontEndUrl + "/payment/failure"
         );
 
-        log.info("backUrls: "+backUrls);
-
         System.out.println(pedido.getEnderecoId());
-        Address endereco = usuarioService.getEnderecoById(pedido.getUser(), pedido.getEnderecoId());
+        Address endereco = usuarioService.getEnderecoById(pedido.getUser(), 
+                                                        pedido.getEnderecoId());
 
         DeliveryAddressDTO deliveryDTO = new DeliveryAddressDTO(
             endereco.getZipcode(),
@@ -71,8 +67,6 @@ public class PaymentService {
             endereco.getCity(),
             endereco.getState()
         );
-
-        log.info("Deliverydto: "+ deliveryDTO);
 
         List<ItemDTO> items = pedido.getItens().stream()
             .map(item -> new ItemDTO(
@@ -90,13 +84,6 @@ public class PaymentService {
             pedido.getFrete()
         ));    
 
-
-        log.info("Items encontrados: {} itens", items.size());
-        items.forEach(item -> 
-            log.info("  Item: ID={}, Nome={}, Quantidade={}, Preço={}",
-                item.id(), item.title(), item.quantity(), item.unitPrice())
-        );
-
         CreatePreferenceRequestDTO request = new CreatePreferenceRequestDTO(
             pedido.getUser().getId(),
             pedido.getValorTotal(),
@@ -107,16 +94,14 @@ public class PaymentService {
             items
         );
         
-        log.info("request criado");
-
         String orderNumber = pedido.getId().toString();
 
         try{
             CreatePreferenceResponseDTO responseDTO = mercadoPagoClient
-                        .createPreference(request, orderNumber.toString());
+                        .createPreference(request, orderNumber);
 
             return responseDTO;
-        } catch(Exception e){
+        } catch(MPApiException | MPException e){
             log.error("Error no service: ", e.getMessage());
         }
         return null;

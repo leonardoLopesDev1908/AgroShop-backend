@@ -1,9 +1,6 @@
 package com.dailycodework.agroshop.model;
 
-import org.hibernate.annotations.NaturalId;
-
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;

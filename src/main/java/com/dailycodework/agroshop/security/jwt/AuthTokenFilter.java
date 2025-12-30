@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -55,22 +56,10 @@ public class AuthTokenFilter extends OncePerRequestFilter{
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
 
-        } catch (Exception e) {
+        } catch (UsernameNotFoundException e) {
             SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
     }
-
-    // private void sendErroResponse(HttpServletResponse response) throws IOException{
-    //     System.out.println("ERROR RESPONSE USERDETAILS");
-    //     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    //     response.setContentType("application/json");
-    //     ErroResponse erro = new ErroResponse("Acesso inválido");
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     String jsonResponse = mapper.writeValueAsString(erro);
-    //     response.getWriter().write(jsonResponse);
-    // }
-
-    
 }

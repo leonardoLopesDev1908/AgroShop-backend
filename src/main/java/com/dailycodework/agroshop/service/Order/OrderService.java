@@ -42,7 +42,6 @@ public class OrderService implements IOrderService{
     private final ProductRepository produtoRepository;
     private final AddressRepository enderecoRepository;
 
-    private final OrderAvaliator validator;
     private final ICartService carrinhoService;
     
     private final OrderMapper mapper;

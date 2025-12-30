@@ -11,6 +11,7 @@ import com.dailycodework.agroshop.controller.dto.payments.CreatePreferenceRespon
 import com.dailycodework.agroshop.model.Payer;
 import com.dailycodework.agroshop.model.PaymentEntity;
 import com.dailycodework.agroshop.model.enums.PaymentStatus;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadopago.MercadoPagoConfig;
@@ -41,16 +42,16 @@ public class MercadoPagoClient {
     @PostConstruct
     public void init(){
         MercadoPagoConfig.setAccessToken(accessToken);
-        log.info("iniciando mercado pago");
 
         if(accessToken == null || accessToken.trim().isEmpty()){
             log.error("AccessToken inválido");
         }
     }
 
-    public CreatePreferenceResponseDTO createPreference(CreatePreferenceRequestDTO inputData, String orderNumber) 
-                                                throws MPException, MPApiException {
-        log.info("Entrou no MercadoPagoClient");
+    public CreatePreferenceResponseDTO createPreference(
+                                                    CreatePreferenceRequestDTO inputData, 
+                                                    String orderNumber) 
+                                                    throws MPException, MPApiException {
         try{
             PreferenceClient preferenceClient = new PreferenceClient();
             List<PreferenceItemRequest> items;
@@ -82,33 +83,22 @@ public class MercadoPagoClient {
                 .externalReference(orderNumber)
                 .build();
             
-            log.info("Criando preferência para orderNumber: {}", orderNumber);
-            log.info("Notification URL: {}", notificationUrl);
-
-            log.info("Enviando requisição para API do Mercado Pago...");
             Preference preference = preferenceClient.create(preferenceRequest);
-
-            log.info("Preference criada com sucesso");
 
             return new CreatePreferenceResponseDTO(
                 preference.getId(),
                 preference.getInitPoint()
             );
 
-    } catch(MPApiException e){
-            log.error("=== ERRO NA API DO MERCADO PAGO ===");
-            log.error("Status Code: {}", e.getStatusCode());
-            log.error("Mensagem: {}", e.getMessage());
-            
+        } catch(MPApiException e){
             if (e.getApiResponse() != null && e.getApiResponse().getContent() != null) {
                 String responseContent = e.getApiResponse().getContent();
-                log.error("Resposta da API: {}", responseContent);
 
                 try {
                     ObjectMapper mapper = new ObjectMapper();
                     JsonNode jsonNode = mapper.readTree(responseContent);
-                    log.error("Erro detalhado: {}", jsonNode.toPrettyString());
-                } catch (Exception jsonEx) {
+                    log.error(jsonNode.asText());
+                } catch (JsonProcessingException jsonEx) {
                     log.error("Conteúdo da resposta (raw): {}", responseContent);
                 }
             }
